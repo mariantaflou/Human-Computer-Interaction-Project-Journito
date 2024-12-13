@@ -1,13 +1,44 @@
 import 'package:flutter/material.dart';
 
-class LoginScreen extends StatelessWidget {
+class LoginScreen extends StatefulWidget {
+  const LoginScreen({super.key});
+
+  @override
+  State<LoginScreen> createState() => _LoginScreenState();
+}
+
+class _LoginScreenState extends State<LoginScreen> {
+  final TextEditingController _usernameController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
+
+  void _signIn() {
+    final username = _usernameController.text;
+    final password = _passwordController.text;
+
+    if (username == 'user' && password == 'password') {
+      Navigator.pushReplacementNamed(context, '/home'); // Navigate to the home screen
+    } else {
+      showDialog(
+        context: context,
+        builder: (context) => AlertDialog(
+          title: const Text('Error'),
+          content: const Text('Invalid username or password.'),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(context),
+              child: const Text('OK'),
+            ),
+          ],
+        ),
+      );
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Container(
-        width: double.infinity,
-        height: double.infinity,
-        decoration: BoxDecoration(
+        decoration: const BoxDecoration(
           gradient: LinearGradient(
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
@@ -18,153 +49,105 @@ class LoginScreen extends StatelessWidget {
             ],
           ),
         ),
-        child: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 30),
           child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              const SizedBox(height: 50),
-              // App Name
               const Text(
-                "Journito",
+                'Journito',
                 style: TextStyle(
-                  fontSize: 70,
-                  fontWeight: FontWeight.w400,
+                  fontSize: 48,
+                  fontFamily: 'Cursive',
+                  color: Color(0xFFC09B80),
+                ),
+                textAlign: TextAlign.center,
+              ),
+              const SizedBox(height: 20),
+              const Text(
+                'Log in',
+                style: TextStyle(
+                  fontSize: 24,
                   color: Colors.white,
                 ),
+                textAlign: TextAlign.center,
               ),
-              const SizedBox(height: 50),
-              // Username Field
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const Text(
-                      "Username:",
-                      style: TextStyle(
-                        fontSize: 20,
-                        fontWeight: FontWeight.w400,
-                        color: Colors.white,
-                      ),
-                    ),
-                    const SizedBox(height: 10),
-                    Container(
-                      width: double.infinity,
-                      height: 44,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(35),
-                        color: Color(0xff6a827e),
-                      ),
-                      child: const Padding(
-                        padding: EdgeInsets.symmetric(horizontal: 16),
-                        child: Align(
-                          alignment: Alignment.centerLeft,
-                          child: Text(
-                            "|",
-                            style: TextStyle(
-                              fontSize: 20,
-                              color: Colors.white,
-                            ),
-                          ),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              // Password Field
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const Text(
-                      "Password:",
-                      style: TextStyle(
-                        fontSize: 20,
-                        fontWeight: FontWeight.w400,
-                        color: Colors.white,
-                      ),
-                    ),
-                    const SizedBox(height: 10),
-                    Container(
-                      width: double.infinity,
-                      height: 44,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(35),
-                        color: Color(0xff6a827e),
-                      ),
-                      child: const Padding(
-                        padding: EdgeInsets.symmetric(horizontal: 16),
-                        child: Align(
-                          alignment: Alignment.centerLeft,
-                          child: Text(
-                            "*******",
-                            style: TextStyle(
-                              fontSize: 20,
-                              color: Colors.white,
-                            ),
-                          ),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              // Forgot Password
-              const Padding(
-                padding: EdgeInsets.symmetric(vertical: 10),
-                child: Text(
-                  "Forgot Password?",
-                  style: TextStyle(
-                    fontSize: 13,
-                    fontWeight: FontWeight.w400,
-                    color: Colors.white,
+              const SizedBox(height: 40),
+              TextField(
+                controller: _usernameController,
+                decoration: InputDecoration(
+                  filled: true,
+                  fillColor: const Color(0xFF49636C), // Light teal
+                  hintText: 'Username',
+                  hintStyle: const TextStyle(color: Colors.white70),
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(10),
+                    borderSide: BorderSide.none,
                   ),
                 ),
+                style: const TextStyle(color: Colors.white),
               ),
-              // Log In Button
-              Padding(
-                padding: const EdgeInsets.symmetric(vertical: 20),
-                child: Container(
-                  width: 200,
-                  height: 50,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(35),
-                    color: Colors.white,
-                  ),
-                  child: const Center(
-                    child: Text(
-                      "Log in",
-                      style: TextStyle(
-                        fontSize: 20,
-                        fontWeight: FontWeight.w400,
-                        color: Color(0xff6a827e),
-                      ),
-                    ),
+              const SizedBox(height: 20),
+              TextField(
+                controller: _passwordController,
+                obscureText: true,
+                decoration: InputDecoration(
+                  filled: true,
+                  fillColor: const Color(0xFF49636C), // Light teal
+                  hintText: 'Password',
+                  hintStyle: const TextStyle(color: Colors.white70),
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(10),
+                    borderSide: BorderSide.none,
                   ),
                 ),
+                style: const TextStyle(color: Colors.white),
               ),
-              // Sign Up and Google Sign In
-              const Row(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                children:  [
-                  Text(
-                    "Sign up",
-                    style: TextStyle(
-                      fontSize: 13,
-                      fontWeight: FontWeight.w400,
-                      color: Colors.white,
-                    ),
+              const SizedBox(height: 10),
+              TextButton(
+                onPressed: () {
+                  // Implement forgot password functionality if needed
+                },
+                child: const Text(
+                  'Forgot Password?',
+                  style: TextStyle(color: Colors.white70),
+                  textAlign: TextAlign.end,
+                ),
+              ),
+              const SizedBox(height: 20),
+              ElevatedButton(
+                onPressed: _signIn,
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: const Color(0xFFC09B80), // Light brown
+                  padding: const EdgeInsets.symmetric(vertical: 15),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10),
                   ),
-                  Text(
-                    "Sign in with Google",
-                    style: TextStyle(
-                      fontSize: 13,
-                      fontWeight: FontWeight.w400,
-                      color: Colors.white,
-                    ),
-                  ),
-                ],
+                ),
+                child: const Text(
+                  'Sign In',
+                  style: TextStyle(fontSize: 18, color: Colors.white),
+                ),
+              ),
+              const SizedBox(height: 10),
+              TextButton(
+                onPressed: () {
+                  Navigator.pushNamed(context, '/signup'); // Add a signup route later
+                },
+                child: const Text(
+                  'Sign up',
+                  style: TextStyle(color: Colors.white70),
+                ),
+              ),
+              TextButton(
+                onPressed: () {
+                  // Implement Google Sign-in functionality
+                },
+                child: const Text(
+                  'Sign in with Google',
+                  style: TextStyle(color: Colors.white70),
+                ),
               ),
             ],
           ),

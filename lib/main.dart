@@ -1,12 +1,15 @@
 import 'package:flutter/material.dart';
 import 'screens/welcome_screen.dart';
-import 'screens/login.dart';
+import 'screens/login.dart'; // Import the login screen
+import 'screens/home_screen.dart';
 
 void main() {
-  runApp(MyApp());
+  runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
+  const MyApp({super.key});
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -14,7 +17,12 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: WelcomeScreen(),
+      initialRoute: '/',
+      routes: {
+        '/': (context) => const WelcomeScreen(),
+        '/login': (context) => const LoginScreen(),
+        '/home': (context) => const HomeScreen(), // Define the home screen route
+      },
     );
   }
 }
