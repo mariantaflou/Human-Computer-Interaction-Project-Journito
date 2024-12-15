@@ -25,18 +25,15 @@ class HomeScreen extends StatelessWidget {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                const Expanded(
-                  child: Align(
-                    alignment: Alignment.center,
-                    child: Text(
-                      'Journito',
-                      style: TextStyle(
-                        fontFamily: 'Cursive',
-                        fontSize: 36,
-                        fontWeight: FontWeight.bold,
-                        color: Color(0xFFC09B80),
-                      ),
-                    ),
+                // Empty container to balance the layout
+                Container(width: 56), // Same width as the CircleAvatar
+                const Text(
+                  'Journito',
+                  style: TextStyle(
+                    fontFamily: 'Cursive',
+                    fontSize: 36,
+                    fontWeight: FontWeight.bold,
+                    color: Color(0xFFC09B80),
                   ),
                 ),
                 Padding(

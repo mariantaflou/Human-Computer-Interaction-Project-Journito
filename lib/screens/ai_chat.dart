@@ -32,46 +32,43 @@ class _ChatWithAIScreenState extends State<ChatWithAIScreen> {
               children: [
                 const SizedBox(height: 40),
                 // Title and Profile Icon
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Expanded(
-                      child: GestureDetector(
-                        onTap: () {
-                          Navigator.pop(context); // Navigates back to the home screen
-                        },
-                        child: const Align(
-                          alignment: Alignment.center,
-                          child: Text(
-                            'Journito',
-                            style: TextStyle(
-                              fontFamily: 'Cursive',
-                              fontSize: 36,
-                              fontWeight: FontWeight.bold,
-                              color: Color(0xFFC09B80),
-                            ),
-                          ),
-                        ),
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(right: 16),
-                      child: CircleAvatar(
-                        radius: 20,
-                        backgroundColor: Colors.white,
-                        child: IconButton(
-                          icon: const Icon(
-                            Icons.person,
-                            color: Colors.grey,
-                          ),
-                          onPressed: () {
-                            // Navigate to Profile screen if needed
-                          },
-                        ),
-                      ),
-                    ),
-                  ],
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Container(width: 56), // Same width as the CircleAvatar to balance layout
+            GestureDetector(
+              onTap: () {
+                Navigator.pop(context);
+              },
+              child: Text(
+                'Journito',
+                style: TextStyle(
+                  fontFamily: 'Cursive',
+                  fontSize: 36,
+                  fontWeight: FontWeight.bold,
+                  color: Color(0xFFC09B80),
                 ),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.only(right: 16),
+              child: CircleAvatar(
+                radius: 20,
+                backgroundColor: Colors.white,
+                child: IconButton(
+                  icon: const Icon(
+                    Icons.person,
+                    color: Colors.grey,
+                  ),
+                  onPressed: () {
+                    // Navigate to Profile screen if needed
+                  },
+                ),
+              ),
+            ),
+          ],
+        ),
+
                 const SizedBox(height: 50),
                 // Blue Rectangle for Chat Area
                 Expanded(
