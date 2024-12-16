@@ -70,19 +70,31 @@ class TasksScreen extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 20),
-            // Task Buttons List
+            // Task Buttons List with Rounded Top Corners
             Expanded(
-              child: ListView(
-                children: const [
-                  TaskButton(task: 'Call Mom'),
-                  TaskButton(task: 'Water the Flowers'),
-                  TaskButton(task: 'Go to Bank'),
-                  TaskButton(task: 'Finish Homework'),
-                  TaskButton(task: 'Read a Book'),
-                  TaskButton(task: 'Buy Groceries'),
-                  TaskButton(task: 'Schedule Appointment'),
-                  TaskButton(task: 'Walk the Dog'),
-                ],
+              child: Container(
+                decoration: const BoxDecoration(
+                  color: Color(0xff52717b), // Background color
+                  borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(30), // Rounded top-left corner
+                    topRight: Radius.circular(30), // Rounded top-right corner
+                  ),
+                ),
+                child: ListView(
+                  padding: const EdgeInsets.symmetric(vertical: 10),
+                  children: const [
+                    TaskButton(task: 'Call Mom'),
+                    TaskButton(task: 'Water the Flowers'),
+                    TaskButton(task: 'Go to Bank'),
+                    TaskButton(task: 'Finish Homework'),
+                    TaskButton(task: 'Read a Book'),
+                    TaskButton(task: 'Buy Groceries'),
+                    TaskButton(task: 'Schedule Appointment'),
+                    TaskButton(task: 'Walk the Dog'),
+                    TaskButton(task: 'Call Kostis'),
+                    TaskButton(task: 'Send email to professor')
+                  ],
+                ),
               ),
             ),
             // Bottom Buttons (Add Task and AI Button)
@@ -178,5 +190,4 @@ class TaskButton extends StatelessWidget {
     );
   }
 }
-
 
