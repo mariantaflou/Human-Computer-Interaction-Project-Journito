@@ -36,7 +36,11 @@ class _ChatWithAIScreenState extends State<ChatWithAIScreen> {
                 Container(width: 56), // Balances layout
                 GestureDetector(
                   onTap: () {
-                    Navigator.pop(context);
+                    Navigator.pushNamedAndRemoveUntil(
+                      context,
+                      '/home', // Navigate to HomeScreen
+                      (Route<dynamic> route) => false, // Clear all routes
+                    );
                   },
                   child: const Text(
                     'Journito',
@@ -67,15 +71,15 @@ class _ChatWithAIScreenState extends State<ChatWithAIScreen> {
             // Chat Area
             Expanded(
               child: Container(
-                  decoration: BoxDecoration(
-                      color: const Color(0xff52717B),
-                      borderRadius: const BorderRadius.only(
-                      topLeft: Radius.circular(45),
-                      topRight: Radius.circular(45),
-                      bottomLeft: Radius.zero,  // Set bottom-left to 0
-                      bottomRight: Radius.zero, // Set bottom-right to 0
+                decoration: BoxDecoration(
+                  color: const Color(0xff52717B),
+                  borderRadius: const BorderRadius.only(
+                    topLeft: Radius.circular(45),
+                    topRight: Radius.circular(45),
+                    bottomLeft: Radius.zero, // Set bottom-left to 0
+                    bottomRight: Radius.zero, // Set bottom-right to 0
                   ),
-               ),
+                ),
                 child: Column(
                   children: [
                     const Padding(
