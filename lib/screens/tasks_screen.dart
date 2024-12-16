@@ -23,39 +23,15 @@ class TasksScreen extends StatelessWidget {
             const SizedBox(height: 40),
             // Logo and Profile Picture
             Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                const SizedBox(width: 56), // Empty space for balance
-                GestureDetector(
-                  onTap: () {
-                    Navigator.pushNamedAndRemoveUntil(
-                        context,
-                        '/home', // Target route name
-                        (Route<dynamic> route) => false, // Remove all previous routes
-                    );
-
-                  },
-                  child: const Text(
-                    'Journito',
-                    style: TextStyle(
-                      fontFamily: 'Cursive',
-                      fontSize: 34,
-                      fontWeight: FontWeight.bold,
-                      color: Color(0xFFC09B80),
-                    ),
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.only(right: 16),
-                  child: CircleAvatar(
-                    radius: 20,
-                    backgroundColor: Colors.white,
-                    child: IconButton(
-                      icon: const Icon(Icons.person, color: Colors.grey),
-                      onPressed: () {
-                        // Navigate to Profile Screen
-                      },
-                    ),
+                const Text(
+                  'Journito',
+                  style: TextStyle(
+                    fontFamily: 'Cursive',
+                    fontSize: 34, // Slightly larger
+                    fontWeight: FontWeight.bold,
+                    color: Color(0xFFC09B80),
                   ),
                 ),
               ],
@@ -65,58 +41,55 @@ class TasksScreen extends StatelessWidget {
             const Text(
               "Today's Tasks",
               style: TextStyle(
-                fontSize: 28,
+                fontSize: 32, // Larger Header
                 fontWeight: FontWeight.bold,
                 color: Colors.white,
               ),
             ),
             const SizedBox(height: 20),
-            // Task Buttons List
+            // Task List with More Tasks
             Expanded(
               child: ListView(
                 children: const [
-                  TaskButton(task: 'Call Mom'),
-                  TaskButton(task: 'Water the Flowers'),
-                  TaskButton(task: 'Go to Bank'),
-                  TaskButton(task: 'Finish Homework'),
-                  TaskButton(task: 'Read a Book'),
-                  TaskButton(task: 'Buy Groceries'),
-                  TaskButton(task: 'Schedule Appointment'),
-                  TaskButton(task: 'Walk the Dog'),
-                  TaskButton(task: 'Continue Flutter Project'),
-                  TaskButton(task: 'Call Kostis about university'),
-
+                  TaskRow(task: 'Call Mom'),
+                  TaskRow(task: 'Water the Flowers'),
+                  TaskRow(task: 'Go to Bank'),
+                  TaskRow(task: 'Finish Flutter Project'),
+                  TaskRow(task: 'Buy Groceries'),
+                  TaskRow(task: 'Prepare for Meeting'),
+                  TaskRow(task: 'Clean the House'),
+                  TaskRow(task: 'Read a Book'),
+                  TaskRow(task: 'Plan Vacation'),
+                  TaskRow(task: 'Exercise for 30 Minutes'),
+                  TaskRow(task: 'Cook Dinner'),
                 ],
               ),
             ),
-            // Bottom Buttons (Add Task and AI Button)
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                // Add Task Button
-                Padding(
-                  padding: const EdgeInsets.all(16.0),
-                  child: CircleAvatar(
-                    radius: 25,
-                    backgroundColor: Colors.white,
+            // Bottom Buttons: "+" (Left) and AI (Right)
+            Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  // "+" Button on Bottom Left
+                  CircleAvatar(
+                    radius: 28, // Bigger Button
+                    backgroundColor: const Color(0xffc9a77a),
                     child: IconButton(
-                      icon: const Icon(Icons.add, size: 30, color: Colors.grey),
+                      icon: const Icon(Icons.add, size: 32, color: Colors.white),
                       onPressed: () {
                         // Add Task Functionality
                       },
                     ),
                   ),
-                ),
-                // AI Button
-                Padding(
-                  padding: const EdgeInsets.all(16.0),
-                  child: GestureDetector(
+                  // AI Button on Bottom Right
+                  GestureDetector(
                     onTap: () {
                       Navigator.pushNamed(context, '/ai_chat');
                     },
                     child: Container(
-                      width: 50,
-                      height: 50,
+                      width: 60,
+                      height: 60,
                       decoration: BoxDecoration(
                         color: const Color(0xffc9a77a),
                         borderRadius: BorderRadius.circular(10),
@@ -126,15 +99,15 @@ class TasksScreen extends StatelessWidget {
                           'AI',
                           style: TextStyle(
                             fontWeight: FontWeight.bold,
-                            fontSize: 16,
+                            fontSize: 18,
                             color: Color(0xff2d4d4e),
                           ),
                         ),
                       ),
                     ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
           ],
         ),
@@ -143,37 +116,35 @@ class TasksScreen extends StatelessWidget {
   }
 }
 
-class TaskButton extends StatelessWidget {
+// TaskRow: Task Bar + Down Arrow
+class TaskRow extends StatelessWidget {
   final String task;
 
-  const TaskButton({super.key, required this.task});
+  const TaskRow({super.key, required this.task});
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
-      padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 20),
+      margin: const EdgeInsets.symmetric(vertical: 10, horizontal: 16),
+      padding: const EdgeInsets.symmetric(vertical: 10),
       decoration: BoxDecoration(
         color: const Color(0xffc09b80),
         borderRadius: BorderRadius.circular(30),
       ),
       child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        mainAxisAlignment: MainAxisAlignment.center, // Center the content
         children: [
-          Expanded(
-            child: Center(
-              child: Text(
-                task,
-                style: const TextStyle(
-                  fontSize: 22,
-                  color: Colors.white,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
+          Text(
+            task,
+            style: const TextStyle(
+              fontSize: 24, // Bigger Task Text
+              color: Colors.white,
+              fontWeight: FontWeight.w600,
             ),
           ),
+          const SizedBox(width: 8), // Space between text and arrow
           const Icon(
-            Icons.keyboard_arrow_down,
+            Icons.keyboard_arrow_down, // Down Arrow
             color: Colors.white,
             size: 28,
           ),
@@ -182,3 +153,6 @@ class TaskButton extends StatelessWidget {
     );
   }
 }
+
+
+
