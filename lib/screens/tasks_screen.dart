@@ -29,10 +29,11 @@ class TasksScreen extends StatelessWidget {
                 GestureDetector(
                   onTap: () {
                     Navigator.pushNamedAndRemoveUntil(
-                      context,
-                      '/home', // Navigate to HomeScreen
-                      (Route<dynamic> route) => false, // Clear all routes
+                        context,
+                        '/home', // Target route name
+                        (Route<dynamic> route) => false, // Remove all previous routes
                     );
+
                   },
                   child: const Text(
                     'Journito',
@@ -82,6 +83,9 @@ class TasksScreen extends StatelessWidget {
                   TaskButton(task: 'Buy Groceries'),
                   TaskButton(task: 'Schedule Appointment'),
                   TaskButton(task: 'Walk the Dog'),
+                  TaskButton(task: 'Continue Flutter Project'),
+                  TaskButton(task: 'Call Kostis about university'),
+
                 ],
               ),
             ),
