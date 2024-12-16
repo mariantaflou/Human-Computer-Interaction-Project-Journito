@@ -15,6 +15,7 @@ class _TasksScreenState extends State<TasksScreen> {
     // Add more tasks here dynamically if needed
   ];
 
+  
   void _addNewTask() {
     setState(() {
       tasks.add(Task(
