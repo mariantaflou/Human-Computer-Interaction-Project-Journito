@@ -46,7 +46,7 @@ class _ChatWithAIScreenState extends State<ChatWithAIScreen> {
                     'Journito',
                     style: TextStyle(
                       fontFamily: 'Cursive',
-                      fontSize: 36,
+                      fontSize: 45,
                       fontWeight: FontWeight.bold,
                       color: Color(0xFFC09B80),
                     ),
