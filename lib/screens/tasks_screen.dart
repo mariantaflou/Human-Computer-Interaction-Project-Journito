@@ -12,10 +12,8 @@ class _TasksScreenState extends State<TasksScreen> {
   final List<Task> tasks = [
     Task(title: 'Call Mom', time: '10:00 AM', location: 'Home', notes: 'Wish her happy birthday'),
     Task(title: 'Water the Flowers', time: '6:00 PM', location: 'Garden', notes: 'Focus on the roses'),
-    // Add more tasks here dynamically if needed
   ];
 
-  
   void _addNewTask() {
     setState(() {
       tasks.add(Task(
@@ -50,7 +48,6 @@ class _TasksScreenState extends State<TasksScreen> {
         child: Column(
           children: [
             const SizedBox(height: 40),
-            // App Header
             _buildHeader(context),
             const SizedBox(height: 20),
             const Text(
@@ -62,7 +59,6 @@ class _TasksScreenState extends State<TasksScreen> {
               ),
             ),
             const SizedBox(height: 20),
-            // Task List
             Expanded(
               child: ListView.builder(
                 itemCount: tasks.length,
@@ -115,9 +111,7 @@ class _TasksScreenState extends State<TasksScreen> {
             backgroundColor: Colors.white,
             child: IconButton(
               icon: const Icon(Icons.person, color: Colors.grey),
-              onPressed: () {
-                // Navigate to Profile Screen
-              },
+              onPressed: () {},
             ),
           ),
         ),
@@ -162,10 +156,10 @@ class _TasksScreenState extends State<TasksScreen> {
 
 // Task Object
 class Task {
-  final String title;
-  final String time;
-  final String location;
-  final String notes;
+  String title;
+  String time;
+  String location;
+  String notes;
   bool isExpanded;
 
   Task({
@@ -189,6 +183,39 @@ class TaskWidget extends StatefulWidget {
 }
 
 class _TaskWidgetState extends State<TaskWidget> {
+  late TextEditingController _titleController;
+  late TextEditingController _timeController;
+  late TextEditingController _locationController;
+  late TextEditingController _notesController;
+
+  @override
+  void initState() {
+    super.initState();
+    _titleController = TextEditingController(text: widget.task.title);
+    _timeController = TextEditingController(text: widget.task.time);
+    _locationController = TextEditingController(text: widget.task.location);
+    _notesController = TextEditingController(text: widget.task.notes);
+  }
+
+  @override
+  void dispose() {
+    _titleController.dispose();
+    _timeController.dispose();
+    _locationController.dispose();
+    _notesController.dispose();
+    super.dispose();
+  }
+
+  void _saveTask() {
+    setState(() {
+      widget.task.title = _titleController.text;
+      widget.task.time = _timeController.text;
+      widget.task.location = _locationController.text;
+      widget.task.notes = _notesController.text;
+      widget.task.isExpanded = false; // Collapse after saving
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -230,13 +257,18 @@ class _TaskWidgetState extends State<TaskWidget> {
           ),
           if (widget.task.isExpanded) ...[
             const SizedBox(height: 10),
-            _buildDetailRow('Time:', widget.task.time),
-            _buildDetailRow('Location:', widget.task.location),
-            _buildDetailRow('Notes:', widget.task.notes),
+            _buildEditableField('Title', _titleController),
+            _buildEditableField('Time', _timeController),
+            _buildEditableField('Location', _locationController),
+            _buildEditableField('Notes', _notesController),
             const SizedBox(height: 10),
             Row(
-              mainAxisAlignment: MainAxisAlignment.end,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
+                ElevatedButton(
+                  onPressed: _saveTask,
+                  child: const Text('Save'),
+                ),
                 IconButton(
                   icon: const Icon(Icons.delete, color: Colors.white),
                   onPressed: widget.onDelete,
@@ -249,19 +281,24 @@ class _TaskWidgetState extends State<TaskWidget> {
     );
   }
 
-  Widget _buildDetailRow(String label, String value) {
-    return Row(
+  Widget _buildEditableField(String label, TextEditingController controller) {
+    return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
           label,
           style: const TextStyle(color: Colors.white70, fontSize: 16),
         ),
-        const SizedBox(width: 8),
-        Expanded(
-          child: Text(
-            value,
-            style: const TextStyle(color: Colors.white, fontSize: 16),
+        TextField(
+          controller: controller,
+          style: const TextStyle(color: Colors.white),
+          decoration: const InputDecoration(
+            enabledBorder: UnderlineInputBorder(
+              borderSide: BorderSide(color: Colors.white54),
+            ),
+            focusedBorder: UnderlineInputBorder(
+              borderSide: BorderSide(color: Colors.white),
+            ),
           ),
         ),
       ],
