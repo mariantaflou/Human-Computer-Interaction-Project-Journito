@@ -31,7 +31,7 @@ class HomeScreen extends StatelessWidget {
                   'Journito',
                   style: TextStyle(
                     fontFamily: 'Cursive',
-                    fontSize: 36,
+                    fontSize: 45,
                     fontWeight: FontWeight.bold,
                     color: Color(0xFFC09B80),
                   ),

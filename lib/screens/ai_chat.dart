@@ -26,134 +26,135 @@ class _ChatWithAIScreenState extends State<ChatWithAIScreen> {
             ],
           ),
         ),
-        child: Column(
+        child: Stack(
           children: [
-            const SizedBox(height: 40),
-            // Title and Profile Icon
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            Column(
               children: [
-                Container(width: 56), // Balances layout
-                GestureDetector(
-                  onTap: () {
-                    Navigator.pushNamedAndRemoveUntil(
-                      context,
-                      '/home', // Navigate to HomeScreen
-                      (Route<dynamic> route) => false, // Clear all routes
-                    );
-                  },
-                  child: const Text(
-                    'Journito',
-                    style: TextStyle(
-                      fontFamily: 'Cursive',
-                      fontSize: 36,
-                      fontWeight: FontWeight.bold,
-                      color: Color(0xFFC09B80),
-                    ),
-                  ),
+                const SizedBox(height: 40),
+                // Title and Profile Icon
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Container(width: 56), // Same width as the CircleAvatar to balance layout
+            GestureDetector(
+              onTap: () {
+                Navigator.pop(context);
+              },
+              child: Text(
+                'Journito',
+                style: TextStyle(
+                  fontFamily: 'Cursive',
+                  fontSize: 36,
+                  fontWeight: FontWeight.bold,
+                  color: Color(0xFFC09B80),
                 ),
-                Padding(
-                  padding: const EdgeInsets.only(right: 16),
-                  child: CircleAvatar(
-                    radius: 20,
-                    backgroundColor: Colors.white,
-                    child: IconButton(
-                      icon: const Icon(Icons.person, color: Colors.grey),
-                      onPressed: () {
-                        // Navigate to Profile screen if needed
-                      },
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.only(right: 16),
+              child: CircleAvatar(
+                radius: 20,
+                backgroundColor: Colors.white,
+                child: IconButton(
+                  icon: const Icon(
+                    Icons.person,
+                    color: Colors.grey,
+                  ),
+                  onPressed: () {
+                    // Navigate to Profile screen if needed
+                  },
+                ),
+              ),
+            ),
+          ],
+        ),
+
+                const SizedBox(height: 50),
+                // Blue Rectangle for Chat Area
+                Expanded(
+                  child: Container(
+                    decoration: BoxDecoration(
+                      color: const Color(0xff52717B),
+                      borderRadius: BorderRadius.circular(45),
+                    ),
+                    child: Column(
+                      children: [
+                        // "Chat with AI" Title
+                        const Padding(
+                          padding: EdgeInsets.symmetric(vertical: 16),
+                          child: Text(
+                            'Chat with AI',
+                            style: TextStyle(
+                              fontSize: 24,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.white,
+                            ),
+                          ),
+                        ),
+                        Expanded(
+                          child: ListView.builder(
+                            padding: const EdgeInsets.all(16),
+                            itemCount: messages.length,
+                            itemBuilder: (context, index) {
+                              final isUserMessage = messages[index]['sender'] == 'user';
+                              return ChatBubble(
+                                message: messages[index]['message'] ?? '',
+                                isUser: isUserMessage,
+                              );
+                            },
+                          ),
+                        ),
+                      ],
                     ),
                   ),
                 ),
               ],
             ),
-            const SizedBox(height: 20),
-            // Chat Area
-            Expanded(
-              child: Container(
-                decoration: BoxDecoration(
-                  color: const Color(0xff52717B),
-                  borderRadius: const BorderRadius.only(
-                    topLeft: Radius.circular(45),
-                    topRight: Radius.circular(45),
-                    bottomLeft: Radius.zero, // Set bottom-left to 0
-                    bottomRight: Radius.zero, // Set bottom-right to 0
-                  ),
-                ),
-                child: Column(
+            Positioned(
+              bottom: 0,
+              left: 0,
+              right: 0,
+              child: Padding(
+                padding: const EdgeInsets.all(10),
+                child: Row(
                   children: [
-                    const Padding(
-                      padding: EdgeInsets.symmetric(vertical: 16),
-                      child: Text(
-                        'Chat with AI',
-                        style: TextStyle(
-                          fontSize: 24,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.white,
+                    Expanded(
+                      child: TextField(
+                        controller: messageController,
+                        style: const TextStyle(color: Colors.white),
+                        decoration: InputDecoration(
+                          filled: true,
+                          fillColor: const Color(0xff6A827E),
+                          hintText: 'Type a message...',
+                          hintStyle: const TextStyle(color: Colors.grey),
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(30),
+                            borderSide: BorderSide.none,
+                          ),
                         ),
                       ),
                     ),
-                    Expanded(
-                      child: ListView.builder(
-                        padding: const EdgeInsets.all(16),
-                        itemCount: messages.length,
-                        itemBuilder: (context, index) {
-                          final isUserMessage =
-                              messages[index]['sender'] == 'user';
-                          return ChatBubble(
-                            message: messages[index]['message'] ?? '',
-                            isUser: isUserMessage,
-                          );
-                        },
-                      ),
+                    const SizedBox(width: 10),
+                    IconButton(
+                      icon: const Icon(Icons.send, color: Colors.white),
+                      onPressed: () {
+                        if (messageController.text.trim().isNotEmpty) {
+                          setState(() {
+                            messages.add({
+                              'sender': 'user',
+                              'message': messageController.text.trim(),
+                            });
+                            messages.add({
+                              'sender': 'ai',
+                              'message': 'AI Response for "${messageController.text.trim()}"',
+                            });
+                          });
+                          messageController.clear();
+                        }
+                      },
                     ),
                   ],
                 ),
-              ),
-            ),
-            // Input Field
-            Container(
-              padding: const EdgeInsets.all(10),
-              color: const Color(0xff52717B),
-              child: Row(
-                children: [
-                  Expanded(
-                    child: TextField(
-                      controller: messageController,
-                      style: const TextStyle(color: Colors.white),
-                      decoration: InputDecoration(
-                        filled: true,
-                        fillColor: const Color(0xff6A827E),
-                        hintText: 'Type a message...',
-                        hintStyle: const TextStyle(color: Colors.grey),
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(30),
-                          borderSide: BorderSide.none,
-                        ),
-                      ),
-                    ),
-                  ),
-                  const SizedBox(width: 10),
-                  IconButton(
-                    icon: const Icon(Icons.send, color: Colors.white),
-                    onPressed: () {
-                      if (messageController.text.trim().isNotEmpty) {
-                        setState(() {
-                          messages.add({
-                            'sender': 'user',
-                            'message': messageController.text.trim(),
-                          });
-                          messages.add({
-                            'sender': 'ai',
-                            'message':
-                                'AI Response for "${messageController.text.trim()}"',
-                          });
-                        });
-                        messageController.clear();
-                      }
-                    },
-                  ),
-                ],
               ),
             ),
           ],
@@ -163,7 +164,6 @@ class _ChatWithAIScreenState extends State<ChatWithAIScreen> {
   }
 }
 
-// Chat Bubble Widget
 class ChatBubble extends StatelessWidget {
   final String message;
   final bool isUser;
@@ -187,15 +187,12 @@ class ChatBubble extends StatelessWidget {
             Container(
               padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
               decoration: BoxDecoration(
-                color: isUser
-                    ? const Color(0xffB5D5CD)
-                    : const Color(0xff1F3F42),
+                color: isUser ? const Color(0xffB5D5CD) : const Color(0xff1F3F42),
                 borderRadius: BorderRadius.only(
                   topLeft: const Radius.circular(16),
                   topRight: const Radius.circular(16),
                   bottomLeft: isUser ? const Radius.circular(16) : Radius.zero,
-                  bottomRight:
-                      isUser ? Radius.zero : const Radius.circular(16),
+                  bottomRight: isUser ? Radius.zero : const Radius.circular(16),
                 ),
                 boxShadow: [
                   BoxShadow(
@@ -209,17 +206,15 @@ class ChatBubble extends StatelessWidget {
                 message,
                 style: TextStyle(
                   fontSize: 16,
-                  color: isUser
-                      ? const Color(0xff1F3F42)
-                      : const Color(0xffB5D5CD),
+                  color: isUser ? const Color(0xff1F3F42) : const Color(0xffB5D5CD),
                 ),
               ),
             ),
             // Tail
             Positioned(
               bottom: -6,
-              left: isUser ? null : 4,
-              right: isUser ? 4 : null,
+              left: isUser ? null : 4, // Align left for AI
+              right: isUser ? 4 : null, // Align right for User
               child: CustomPaint(
                 painter: ChatBubbleTailPainter(isUser: isUser),
                 size: const Size(12, 12),
@@ -232,7 +227,6 @@ class ChatBubble extends StatelessWidget {
   }
 }
 
-// Tail Painter for Chat Bubble
 class ChatBubbleTailPainter extends CustomPainter {
   final bool isUser;
 
