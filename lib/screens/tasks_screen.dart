@@ -91,7 +91,7 @@ class _TasksScreenState extends State<TasksScreen> {
             Navigator.pushNamedAndRemoveUntil(
               context,
               '/home',
-                  (Route<dynamic> route) => false,
+              (Route<dynamic> route) => false,
             );
           },
           child: const Text(
