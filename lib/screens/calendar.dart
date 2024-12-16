@@ -16,8 +16,12 @@ class _CalendarScreenState extends State<CalendarScreen> {
   // Mock data for days with logs and tasks (you'll replace this with actual data)
   final Set<DateTime> _daysWithLogs = {
     DateTime(2024, 12, 5),
+    DateTime(2024, 12, 6),
+    DateTime(2024, 12, 7),
+    DateTime(2024, 12, 8),
+    DateTime(2024, 12, 9),
     DateTime(2024, 12, 10),
-    DateTime(2024, 12, 15),
+    DateTime(2024, 12, 11),
   };
 
   final Set<DateTime> _daysWithTasks = {
@@ -119,12 +123,13 @@ class _CalendarScreenState extends State<CalendarScreen> {
                             bool hasLog = _daysWithLogs.any((d) => _isSameDay(d, day));
                             bool hasTask = _daysWithTasks.any((d) => _isSameDay(d, day));
 
-                            if (hasLog && hasTask) {
-                              return _buildMarker(Colors.purple);
-                            } else if (hasLog) {
-                              return _buildMarker(Colors.green);
+                            //if (hasLog && hasTask) {
+                              //return _buildMarker(Color());
+                            //} else if (hasLog) {
+                            if (hasLog) {
+                              return _buildMarker(const Color(0xff1f3f42));
                             } else if (hasTask) {
-                              return _buildMarker(Colors.blue);
+                              return _buildMarker(const Color(0xFFC09B80));
                             }
                             return null;
                           },

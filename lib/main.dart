@@ -5,6 +5,7 @@ import 'screens/home_screen.dart';
 import 'screens/ai_chat.dart';
 import 'screens/tasks_screen.dart'; // Add this line
 import 'screens/calendar.dart';
+import 'screens/journaling.dart';
 
 
 void main() {
@@ -29,6 +30,7 @@ class MyApp extends StatelessWidget {
         '/ai_chat': (context) => const ChatWithAIScreen(),
         '/tasks': (context) => const TasksScreen(),
         '/calendar': (context) => const CalendarScreen(),
+        '/journaling': (context) => const JournalingScreen(),
       },
     );
   }
