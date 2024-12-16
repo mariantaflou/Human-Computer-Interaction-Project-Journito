@@ -39,7 +39,7 @@ class _ChatWithAIScreenState extends State<ChatWithAIScreen> {
                     Navigator.pushNamedAndRemoveUntil(
                       context,
                       '/home', // Navigate to HomeScreen
-                      (Route<dynamic> route) => false, // Clear all routes
+                          (Route<dynamic> route) => false, // Clear all routes
                     );
                   },
                   child: const Text(
@@ -71,9 +71,9 @@ class _ChatWithAIScreenState extends State<ChatWithAIScreen> {
             // Chat Area
             Expanded(
               child: Container(
-                decoration: BoxDecoration(
-                  color: const Color(0xff52717B),
-                  borderRadius: const BorderRadius.only(
+                decoration: const BoxDecoration(
+                  color: Color(0xff52717B),
+                  borderRadius: BorderRadius.only(
                     topLeft: Radius.circular(45),
                     topRight: Radius.circular(45),
                     bottomLeft: Radius.zero, // Set bottom-left to 0
@@ -146,7 +146,7 @@ class _ChatWithAIScreenState extends State<ChatWithAIScreen> {
                           messages.add({
                             'sender': 'ai',
                             'message':
-                                'AI Response for "${messageController.text.trim()}"',
+                            'AI Response for "${messageController.text.trim()}"',
                           });
                         });
                         messageController.clear();
@@ -195,7 +195,7 @@ class ChatBubble extends StatelessWidget {
                   topRight: const Radius.circular(16),
                   bottomLeft: isUser ? const Radius.circular(16) : Radius.zero,
                   bottomRight:
-                      isUser ? Radius.zero : const Radius.circular(16),
+                  isUser ? Radius.zero : const Radius.circular(16),
                 ),
                 boxShadow: [
                   BoxShadow(

@@ -1,11 +1,38 @@
 import 'package:flutter/material.dart';
 
-class TasksScreen extends StatelessWidget {
+class TasksScreen extends StatefulWidget {
   const TasksScreen({super.key});
+
+  @override
+  State<TasksScreen> createState() => _TasksScreenState();
+}
+
+class _TasksScreenState extends State<TasksScreen> {
+  // List of tasks with their details
+  final List<Task> tasks = [
+    Task(title: 'Call Mom', time: '10:00 AM', location: 'Home', notes: 'Wish her happy birthday'),
+    Task(title: 'Water the Flowers', time: '6:00 PM', location: 'Garden', notes: 'Focus on the roses'),
+  ];
+
+  void _addNewTask() {
+    setState(() {
+      tasks.add(Task(
+        title: 'New Task',
+        time: '12:00 PM',
+        location: 'Unknown',
+        notes: 'Details here',
+      ));
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      floatingActionButton: FloatingActionButton(
+        onPressed: _addNewTask,
+        backgroundColor: const Color(0xffc9a77a),
+        child: const Icon(Icons.add, color: Colors.white, size: 30),
+      ),
       body: Container(
         decoration: const BoxDecoration(
           gradient: LinearGradient(
@@ -21,47 +48,8 @@ class TasksScreen extends StatelessWidget {
         child: Column(
           children: [
             const SizedBox(height: 40),
-            // Logo and Profile Picture
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                const SizedBox(width: 56), // Empty space for balance
-                GestureDetector(
-                  onTap: () {
-                    Navigator.pushNamedAndRemoveUntil(
-                        context,
-                        '/home', // Target route name
-                        (Route<dynamic> route) => false, // Remove all previous routes
-                    );
-
-                  },
-                  child: const Text(
-                    'Journito',
-                    style: TextStyle(
-                      fontFamily: 'Cursive',
-                      fontSize: 34,
-                      fontWeight: FontWeight.bold,
-                      color: Color(0xFFC09B80),
-                    ),
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.only(right: 16),
-                  child: CircleAvatar(
-                    radius: 20,
-                    backgroundColor: Colors.white,
-                    child: IconButton(
-                      icon: const Icon(Icons.person, color: Colors.grey),
-                      onPressed: () {
-                        // Navigate to Profile Screen
-                      },
-                    ),
-                  ),
-                ),
-              ],
-            ),
+            _buildHeader(context),
             const SizedBox(height: 20),
-            // Today's Tasks Header
             const Text(
               "Today's Tasks",
               style: TextStyle(
@@ -71,82 +59,162 @@ class TasksScreen extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 20),
-            // Task Buttons List
             Expanded(
-              child: ListView(
-                children: const [
-                  TaskButton(task: 'Call Mom'),
-                  TaskButton(task: 'Water the Flowers'),
-                  TaskButton(task: 'Go to Bank'),
-                  TaskButton(task: 'Finish Homework'),
-                  TaskButton(task: 'Read a Book'),
-                  TaskButton(task: 'Buy Groceries'),
-                  TaskButton(task: 'Schedule Appointment'),
-                  TaskButton(task: 'Walk the Dog'),
-                  TaskButton(task: 'Continue Flutter Project'),
-                  TaskButton(task: 'Call Kostis about university'),
-
-                ],
+              child: ListView.builder(
+                itemCount: tasks.length,
+                itemBuilder: (context, index) {
+                  return TaskWidget(
+                    task: tasks[index],
+                    onDelete: () {
+                      setState(() {
+                        tasks.removeAt(index);
+                      });
+                    },
+                  );
+                },
               ),
             ),
-            // Bottom Buttons (Add Task and AI Button)
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                // Add Task Button
-                Padding(
-                  padding: const EdgeInsets.all(16.0),
-                  child: CircleAvatar(
-                    radius: 25,
-                    backgroundColor: Colors.white,
-                    child: IconButton(
-                      icon: const Icon(Icons.add, size: 30, color: Colors.grey),
-                      onPressed: () {
-                        // Add Task Functionality
-                      },
-                    ),
-                  ),
-                ),
-                // AI Button
-                Padding(
-                  padding: const EdgeInsets.all(16.0),
-                  child: GestureDetector(
-                    onTap: () {
-                      Navigator.pushNamed(context, '/ai_chat');
-                    },
-                    child: Container(
-                      width: 50,
-                      height: 50,
-                      decoration: BoxDecoration(
-                        color: const Color(0xffc9a77a),
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                      child: const Center(
-                        child: Text(
-                          'AI',
-                          style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 16,
-                            color: Color(0xff2d4d4e),
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-              ],
-            ),
+            _buildBottomButtons(),
           ],
         ),
       ),
     );
   }
+
+  Widget _buildHeader(BuildContext context) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        const SizedBox(width: 56),
+        GestureDetector(
+          onTap: () {
+            Navigator.pushNamedAndRemoveUntil(
+              context,
+              '/home',
+                  (Route<dynamic> route) => false,
+            );
+          },
+          child: const Text(
+            'Journito',
+            style: TextStyle(
+              fontFamily: 'Cursive',
+              fontSize: 34,
+              fontWeight: FontWeight.bold,
+              color: Color(0xFFC09B80),
+            ),
+          ),
+        ),
+        Padding(
+          padding: const EdgeInsets.only(right: 16),
+          child: CircleAvatar(
+            radius: 20,
+            backgroundColor: Colors.white,
+            child: IconButton(
+              icon: const Icon(Icons.person, color: Colors.grey),
+              onPressed: () {},
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildBottomButtons() {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: GestureDetector(
+            onTap: () {
+              Navigator.pushNamed(context, '/ai_chat');
+            },
+            child: Container(
+              width: 50,
+              height: 50,
+              decoration: BoxDecoration(
+                color: const Color(0xffc9a77a),
+                borderRadius: BorderRadius.circular(10),
+              ),
+              child: const Center(
+                child: Text(
+                  'AI',
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 16,
+                    color: Color(0xff2d4d4e),
+                  ),
+                ),
+              ),
+            ),
+          ),
+        ),
+      ],
+    );
+  }
 }
 
-class TaskButton extends StatelessWidget {
-  final String task;
+// Task Object
+class Task {
+  String title;
+  String time;
+  String location;
+  String notes;
+  bool isExpanded;
 
-  const TaskButton({super.key, required this.task});
+  Task({
+    required this.title,
+    required this.time,
+    required this.location,
+    required this.notes,
+    this.isExpanded = false,
+  });
+}
+
+// Task Widget
+class TaskWidget extends StatefulWidget {
+  final Task task;
+  final VoidCallback onDelete;
+
+  const TaskWidget({super.key, required this.task, required this.onDelete});
+
+  @override
+  State<TaskWidget> createState() => _TaskWidgetState();
+}
+
+class _TaskWidgetState extends State<TaskWidget> {
+  late TextEditingController _titleController;
+  late TextEditingController _timeController;
+  late TextEditingController _locationController;
+  late TextEditingController _notesController;
+
+  @override
+  void initState() {
+    super.initState();
+    _titleController = TextEditingController(text: widget.task.title);
+    _timeController = TextEditingController(text: widget.task.time);
+    _locationController = TextEditingController(text: widget.task.location);
+    _notesController = TextEditingController(text: widget.task.notes);
+  }
+
+  @override
+  void dispose() {
+    _titleController.dispose();
+    _timeController.dispose();
+    _locationController.dispose();
+    _notesController.dispose();
+    super.dispose();
+  }
+
+  void _saveTask() {
+    setState(() {
+      widget.task.title = _titleController.text;
+      widget.task.time = _timeController.text;
+      widget.task.location = _locationController.text;
+      widget.task.notes = _notesController.text;
+      widget.task.isExpanded = false; // Collapse after saving
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -155,30 +223,85 @@ class TaskButton extends StatelessWidget {
       padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 20),
       decoration: BoxDecoration(
         color: const Color(0xffc09b80),
-        borderRadius: BorderRadius.circular(30),
+        borderRadius: BorderRadius.circular(15),
       ),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      child: Column(
         children: [
-          Expanded(
-            child: Center(
-              child: Text(
-                task,
-                style: const TextStyle(
-                  fontSize: 22,
-                  color: Colors.white,
-                  fontWeight: FontWeight.bold,
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Expanded(
+                child: Text(
+                  widget.task.title,
+                  style: const TextStyle(
+                    fontSize: 22,
+                    color: Colors.white,
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
               ),
+              IconButton(
+                icon: Icon(
+                  widget.task.isExpanded
+                      ? Icons.keyboard_arrow_up
+                      : Icons.keyboard_arrow_down,
+                  color: Colors.white,
+                ),
+                onPressed: () {
+                  setState(() {
+                    widget.task.isExpanded = !widget.task.isExpanded;
+                  });
+                },
+              ),
+            ],
+          ),
+          if (widget.task.isExpanded) ...[
+            const SizedBox(height: 10),
+            _buildEditableField('Title', _titleController),
+            _buildEditableField('Time', _timeController),
+            _buildEditableField('Location', _locationController),
+            _buildEditableField('Notes', _notesController),
+            const SizedBox(height: 10),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                ElevatedButton(
+                  onPressed: _saveTask,
+                  child: const Text('Save'),
+                ),
+                IconButton(
+                  icon: const Icon(Icons.delete, color: Colors.white),
+                  onPressed: widget.onDelete,
+                ),
+              ],
             ),
-          ),
-          const Icon(
-            Icons.keyboard_arrow_down,
-            color: Colors.white,
-            size: 28,
-          ),
+          ],
         ],
       ),
+    );
+  }
+
+  Widget _buildEditableField(String label, TextEditingController controller) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          label,
+          style: const TextStyle(color: Colors.white70, fontSize: 16),
+        ),
+        TextField(
+          controller: controller,
+          style: const TextStyle(color: Colors.white),
+          decoration: const InputDecoration(
+            enabledBorder: UnderlineInputBorder(
+              borderSide: BorderSide(color: Colors.white54),
+            ),
+            focusedBorder: UnderlineInputBorder(
+              borderSide: BorderSide(color: Colors.white),
+            ),
+          ),
+        ),
+      ],
     );
   }
 }

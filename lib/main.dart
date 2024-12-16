@@ -4,6 +4,7 @@ import 'screens/login.dart'; // Import the login screen
 import 'screens/home_screen.dart';
 import 'screens/ai_chat.dart';
 import 'screens/tasks_screen.dart'; // Add this line
+import 'screens/calendar.dart';
 
 
 void main() {
@@ -27,6 +28,7 @@ class MyApp extends StatelessWidget {
         '/home': (context) => const HomeScreen(), // Define the home screen route
         '/ai_chat': (context) => const ChatWithAIScreen(),
         '/tasks': (context) => const TasksScreen(),
+        '/calendar': (context) => const CalendarScreen(),
       },
     );
   }

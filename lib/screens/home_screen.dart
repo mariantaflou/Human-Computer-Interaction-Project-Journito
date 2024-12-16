@@ -31,7 +31,7 @@ class HomeScreen extends StatelessWidget {
                   'Journito',
                   style: TextStyle(
                     fontFamily: 'Cursive',
-                    fontSize: 36,
+                    fontSize: 45,
                     fontWeight: FontWeight.bold,
                     color: Color(0xFFC09B80),
                   ),
@@ -62,14 +62,19 @@ class HomeScreen extends StatelessWidget {
                 IconButton(
                   icon: const Icon(Icons.chevron_left, color: Colors.white),
                   onPressed: () {
-                    Navigator.pushNamed(context, '/calendar');
+                    // Handle left chevron press
                   },
                 ),
-                const Text(
-                  'Mon 21 Oct 2024',
-                  style: TextStyle(
-                    fontSize: 22,
-                    color: Colors.white,
+                GestureDetector( // Wrap Text with GestureDetector
+                  onTap: () {
+                    Navigator.pushNamed(context, '/calendar');
+                  },
+                  child: const Text(
+                    'Mon 21 Oct 2024',
+                    style: TextStyle(
+                      fontSize: 22,
+                      color: Colors.white,
+                    ),
                   ),
                 ),
                 IconButton(
