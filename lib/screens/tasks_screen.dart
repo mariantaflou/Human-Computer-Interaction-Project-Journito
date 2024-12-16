@@ -98,7 +98,7 @@ class _TasksScreenState extends State<TasksScreen> {
             'Journito',
             style: TextStyle(
               fontFamily: 'Cursive',
-              fontSize: 34,
+              fontSize: 45,
               fontWeight: FontWeight.bold,
               color: Color(0xFFC09B80),
             ),
@@ -222,7 +222,7 @@ class _TaskWidgetState extends State<TaskWidget> {
       margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
       padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 20),
       decoration: BoxDecoration(
-        color: const Color(0xffc09b80),
+        color: const Color(0xffc9a77a),
         borderRadius: BorderRadius.circular(15),
       ),
       child: Column(

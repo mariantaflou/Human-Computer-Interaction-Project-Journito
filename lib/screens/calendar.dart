@@ -176,7 +176,7 @@ class _CalendarScreenState extends State<CalendarScreen> {
             'Journito',
             style: TextStyle(
               fontFamily: 'Cursive',
-              fontSize: 34,
+              fontSize: 45,
               fontWeight: FontWeight.bold,
               color: Color(0xFFC09B80),
             ),
