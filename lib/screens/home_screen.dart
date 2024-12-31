@@ -65,7 +65,8 @@ class HomeScreen extends StatelessWidget {
                     // Handle left chevron press
                   },
                 ),
-                GestureDetector( // Wrap Text with GestureDetector
+                GestureDetector(
+                  // Wrap Text with GestureDetector
                   onTap: () {
                     Navigator.pushNamed(context, '/calendar');
                   },
@@ -149,6 +150,7 @@ class HomeScreen extends StatelessWidget {
                       ),
                     ),
                     onPressed: () {
+                      // Add navigation to the experiences screen
                       Navigator.pushNamed(context, '/experiences');
                     },
                     child: const Text(
