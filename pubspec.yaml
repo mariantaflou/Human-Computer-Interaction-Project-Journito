@@ -1,24 +1,27 @@
 name: journito
 description: "A new Flutter project."
-publish_to: 'none' # Remove this line if you wish to publish to pub.dev
+publish_to: 'none'
 
 version: 1.0.0+1
 
 environment:
-  sdk: ^3.5.4
+  sdk: '>=3.0.0 <4.0.0' # Or '>=3.7.0 <4.0.0' or higher if needed
 
 dependencies:
+  http: ^1.2.2
   flutter:
     sdk: flutter
-  shared_preferences: ^2.0.18
   cupertino_icons: ^1.0.8
   table_calendar: ^3.1.3
   image_picker: ^1.1.2
+  shared_preferences: ^2.0.15
+  google_generative_ai: ^0.2.3 # Or latest
+  flutter_dotenv: 5.1.0
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
-  flutter_lints: ^4.0.0
+  flutter_lints: ^2.0.0
 
 flutter:
   uses-material-design: true
@@ -26,3 +29,4 @@ flutter:
   assets:
     - assets/images/Shape.png
     - assets/images/icon.png
+    - .env
