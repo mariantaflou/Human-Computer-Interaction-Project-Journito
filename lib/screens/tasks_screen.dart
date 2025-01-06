@@ -1,6 +1,5 @@
-import 'dart:convert';
 import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import '/widgets/ai_button.dart';
 
 class TasksScreen extends StatefulWidget {
   const TasksScreen({super.key});
@@ -10,31 +9,17 @@ class TasksScreen extends StatefulWidget {
 }
 
 class _TasksScreenState extends State<TasksScreen> {
-  final List<Task> tasks = [];
-
-  @override
-  void initState() {
-    super.initState();
-    _loadTasks();
-  }
-
-  Future<void> _loadTasks() async {
-    final prefs = await SharedPreferences.getInstance();
-    final tasksJson = prefs.getString('tasks');
-    if (tasksJson != null) {
-      final List<dynamic> taskList = jsonDecode(tasksJson);
-      setState(() {
-        tasks.clear();
-        tasks.addAll(taskList.map((json) => Task.fromJson(json)));
-      });
-    }
-  }
-
-  Future<void> _saveTasks() async {
-    final prefs = await SharedPreferences.getInstance();
-    final tasksJson = jsonEncode(tasks.map((task) => task.toJson()).toList());
-    await prefs.setString('tasks', tasksJson);
-  }
+  // List of tasks with their details
+  final List<Task> tasks = [
+    Task(title: 'Call Mom',
+        time: '10:00 AM',
+        location: 'Home',
+        notes: 'Wish her happy birthday'),
+    Task(title: 'Water the Flowers',
+        time: '6:00 PM',
+        location: 'Garden',
+        notes: 'Focus on the roses'),
+  ];
 
   void _addNewTask() {
     setState(() {
@@ -45,14 +30,6 @@ class _TasksScreenState extends State<TasksScreen> {
         notes: 'Details here',
       ));
     });
-    _saveTasks();
-  }
-
-  void _deleteTask(int index) {
-    setState(() {
-      tasks.removeAt(index);
-    });
-    _saveTasks();
   }
 
   @override
@@ -119,6 +96,8 @@ class _TasksScreenState extends State<TasksScreen> {
                   borderRadius: BorderRadius.only(
                     topLeft: Radius.circular(45),
                     topRight: Radius.circular(45),
+                    bottomLeft: Radius.zero, // Set bottom-left to 0
+                    bottomRight: Radius.zero, // Set bottom-right to 0
                   ),
                 ),
                 child: Column(
@@ -140,14 +119,17 @@ class _TasksScreenState extends State<TasksScreen> {
                         itemBuilder: (context, index) {
                           return TaskWidget(
                             task: tasks[index],
-                            onDelete: () => _deleteTask(index),
-                            onSave: _saveTasks,
+                            onDelete: () {
+                              setState(() {
+                                tasks.removeAt(index);
+                              });
+                            },
                           );
                         },
                       ),
                     ),
                     Padding(
-                      padding: const EdgeInsets.only(bottom: 16.0, left: 16.0),
+                      padding: const EdgeInsets.only(bottom: 0, left: 16.0, right: 0),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
@@ -176,9 +158,11 @@ class _TasksScreenState extends State<TasksScreen> {
                               ),
                             ),
                           ),
+                          buildAIButton(context),
                         ],
                       ),
                     ),
+
                   ],
                 ),
               ),
@@ -190,6 +174,47 @@ class _TasksScreenState extends State<TasksScreen> {
   }
 }
 
+
+Widget _buildHeader(BuildContext context) {
+  return Row(
+    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+    children: [
+      const SizedBox(width: 56),
+      GestureDetector(
+        onTap: () {
+          Navigator.pushNamedAndRemoveUntil(
+            context,
+            '/home',
+                (Route<dynamic> route) => false,
+          );
+        },
+        child: const Text(
+          'Journito',
+          style: TextStyle(
+            fontFamily: 'Cursive',
+            fontSize: 45,
+            fontWeight: FontWeight.bold,
+            color: Color(0xFFC09B80),
+          ),
+        ),
+      ),
+      Padding(
+        padding: const EdgeInsets.only(right: 16),
+        child: CircleAvatar(
+          radius: 20,
+          backgroundColor: Colors.white,
+          child: IconButton(
+            icon: const Icon(Icons.person, color: Colors.grey),
+            onPressed: () {},
+          ),
+        ),
+      ),
+    ],
+  );
+}
+
+
+// Task Object
 class Task {
   String title;
   String time;
@@ -204,34 +229,14 @@ class Task {
     required this.notes,
     this.isExpanded = false,
   });
-
-  Map<String, dynamic> toJson() {
-    return {
-      'title': title,
-      'time': time,
-      'location': location,
-      'notes': notes,
-      'isExpanded': isExpanded,
-    };
-  }
-
-  factory Task.fromJson(Map<String, dynamic> json) {
-    return Task(
-      title: json['title'],
-      time: json['time'],
-      location: json['location'],
-      notes: json['notes'],
-      isExpanded: json['isExpanded'] ?? false,
-    );
-  }
 }
 
+// Task Widget
 class TaskWidget extends StatefulWidget {
   final Task task;
   final VoidCallback onDelete;
-  final VoidCallback onSave;
 
-  const TaskWidget({super.key, required this.task, required this.onDelete, required this.onSave});
+  const TaskWidget({super.key, required this.task, required this.onDelete});
 
   @override
   State<TaskWidget> createState() => _TaskWidgetState();
@@ -267,9 +272,8 @@ class _TaskWidgetState extends State<TaskWidget> {
       widget.task.time = _timeController.text;
       widget.task.location = _locationController.text;
       widget.task.notes = _notesController.text;
-      widget.task.isExpanded = false;
+      widget.task.isExpanded = false; // Collapse after saving
     });
-    widget.onSave();
   }
 
   @override
@@ -361,5 +365,3 @@ class _TaskWidgetState extends State<TaskWidget> {
     );
   }
 }
-
-
