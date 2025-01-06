@@ -26,3 +26,4 @@ flutter:
   assets:
     - assets/images/Shape.png
     - assets/images/icon.png
+    - .env
