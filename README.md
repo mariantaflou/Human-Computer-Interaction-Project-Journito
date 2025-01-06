@@ -1,32 +1,34 @@
-# Journito:
+## Journito:
 A Flutter-based application designed for task management and journaling
 with modern UI and persistence features.
 
+
+## Table of Contents
 Table of Contents:
-1. Description
-2. Features
-3. Installation
-4. Usage
-5. Dependencies
-6. Architecture
-7. Screenshots
-8. License
+1. Description.
+2. Features.
+- [Installation](#installation)
+- [Usage](#usage)
+5. Dependencies.
+6. Architecture.
+7. Screenshots.
+- [License](#license)
 
 
-# Description:
+## Description
 >Journito is a task management and journaling app that helps users stay
 organized. With features like login persistence, calendar integration,
 and photo attachment, Journito is built to enhance productivity.
 
 
-# Features:
+## Features
 >User authentication with persistent login state.
 >Calendar view for task management (powered by table_calendar).
 >Image attachment with the device's gallery or camera (using image_picker).
 >Modern UI design with gradient backgrounds and customizable themes.
 >Data persistence using shared_preferences.
 
-# Instalation:
+## Installation
 1.Clone the repository:
 Copy code git clone https://github.com/mariantaflou/journito.git
 2.Navigate to the project directory:
@@ -37,7 +39,7 @@ flutter pub get
 flutter run
 
 
-# Usage:
+## Usage
 Launch the app.
 Create an account or log in with your credentials.
 Use the calendar to view or create tasks.
@@ -46,7 +48,7 @@ Logout or close the app—your data is saved automatically.
 
 
 
-# Dependencies:
+## Dependencies
 The project uses the following packages:
 Flutter SDK: ^3.5.4
 shared_preferences: ^2.0.18 (local data persistence)
@@ -56,21 +58,21 @@ cupertino_icons: ^1.0.8 (iOS icons)
 
 
 
-# Architecture:
+## Architecture
 Journito follows a clean architecture pattern:
 UI Layer: Handles visual representation and user interaction.
 Data Layer: Manages persistence with shared_preferences and any future integration with a remote database.
 State Management: Stateless widgets combined with controllers for simplicity.
 
 
-# Screenshots:
+## Screenshots
 Add screenshots of your app's UI (login screen, calendar view, task details, etc.).
 
 
-# License:
+## License
 This project was created as part of a computer-human interaction assignment and is not licensed for public or commercial use.
 
-# Credits:
+## Credits
 This project was created collaboratively by:
 
 [Your Name]: Role or area of focus (e.g., "UI/UX Design and Frontend Development")
