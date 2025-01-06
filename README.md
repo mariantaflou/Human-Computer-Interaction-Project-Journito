@@ -29,7 +29,7 @@ AI chat,and photo attachment, Journito is built to enhance productivity.
 •Data persistence using shared_preferences.<br>
 •AI chat  to provide accurate and real-time responses. 
 
-## Installation
+## Installation not fixed(ernest)
 1.Clone the repository:
 Copy code git clone https://github.com/mariantaflou/journito.git
 2.Navigate to the project directory:
@@ -40,9 +40,9 @@ flutter pub get
 flutter run
 
 
-## Usage
+## Usage   Add more info (ernest)
 1.Launch the app.<br>
-2.Log in using <span style="color:blue">username.</span> as username and <span style="color:red">password.</span> as password.<br>
+2.Log in using **username** as username and **password** as password.<br>
 3.Use the calendar to view or create tasks.<br>
 4.Attach images to your tasks for better context.<br>
 5.Logout or close the app—your data is saved automatically.<br>
@@ -66,14 +66,14 @@ Journito follows a clean architecture pattern:<br>
 •State Management: Stateless widgets combined with controllers for simplicity.<br>
 
 
-## Screenshots
+## Screenshots add screens (ernest)
 Add screenshots of your app's UI (login screen, calendar view, task details, etc.).
 
 
 ## License
 This project was created as part of a computer-human interaction assignment <br>and is not licensed for public or commercial use.
 
-## Credits
+## Credits add names of each(ernest)
 This project was created collaboratively by:<br>
 •[Your Name]: Role or area of focus (e.g., "UI/UX Design and Frontend Development")<br>
 •[Second Person's Name]: Role or area of focus (e.g., "Backend Development and Database Management")<br>
