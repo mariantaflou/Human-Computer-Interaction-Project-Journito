@@ -16,7 +16,7 @@ class _LoginScreenState extends State<LoginScreen> {
     final password = _passwordController.text;
 
     if (username == 'user' && password == 'password') {
-      Navigator.pushReplacementNamed(context, '/home'); // Navigate to the home screen
+      Navigator.pushReplacementNamed(context, '/preferences'); // Navigate to Preferences Screen
     } else {
       showDialog(
         context: context,
@@ -156,3 +156,4 @@ class _LoginScreenState extends State<LoginScreen> {
     );
   }
 }
+
