@@ -8,12 +8,9 @@ import 'screens/journaling.dart';
 import 'screens/login.dart';
 import 'screens/tasks_screen.dart';
 import 'screens/experiences_screen.dart';
-import 'screens/preferences_screen.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
-
+import 'screens/preferences_screen.dart'; // Import the PreferencesScreen
 
 void main() async {
-  await dotenv.load();
   runApp(MyApp());
 }
 
