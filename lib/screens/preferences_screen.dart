@@ -40,10 +40,10 @@ class PreferencesScreen extends StatelessWidget {
             const Text(
               'What do you like?',
               style: TextStyle(
-                fontFamily: 'Mervale Script',
-                fontSize: 30,
+                fontFamily: 'Cursive',
+                fontSize: 45,
                 fontWeight: FontWeight.bold,
-                color: Color(0xffE0A28E),
+                color: Color(0xFFC09B80),
               ),
             ),
             const SizedBox(height: 20),
@@ -51,7 +51,7 @@ class PreferencesScreen extends StatelessWidget {
             Expanded(
               child: Container(
                 decoration: BoxDecoration(
-                  color: const Color(0xff4a6764), // Greenish background
+                  color: const Color(0xff4C7471), // Greenish background
                   borderRadius: BorderRadius.circular(30),
                 ),
                 margin: const EdgeInsets.symmetric(horizontal: 16),
