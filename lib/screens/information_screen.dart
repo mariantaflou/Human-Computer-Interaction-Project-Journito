@@ -5,8 +5,17 @@ class InformationScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final String experienceTitle =
-        ModalRoute.of(context)?.settings.arguments as String? ?? 'Experience';
+    // Extract the arguments passed to this screen
+
+
+    // Use default values if arguments are missing
+    final Map<String, String> experienceData =
+      ModalRoute.of(context)?.settings.arguments as Map<String, String>;
+    final title = experienceData['title'] ?? 'Experience';
+    final description = experienceData['description'] ?? '';
+    final location = experienceData['location'] ?? '';
+    final date = experienceData['date'] ?? '';
+
 
     return Scaffold(
       body: Container(
@@ -47,11 +56,46 @@ class InformationScreen extends StatelessWidget {
             const SizedBox(height: 20),
             // Experience Information
             Expanded(
-              child: Center(
-                child: Text(
-                  'Details about $experienceTitle',
-                  style: const TextStyle(fontSize: 22, color: Colors.white),
-                  textAlign: TextAlign.center,
+              child: Padding(
+                padding: const EdgeInsets.all(16),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    Text(
+                      title,
+                      style: const TextStyle(
+                        fontSize: 28,
+                        color: Colors.white,
+                        fontWeight: FontWeight.bold,
+                      ),
+                      textAlign: TextAlign.center,
+                    ),
+                    const SizedBox(height: 20),
+                    Text(
+                      description,
+                      style: const TextStyle(
+                        fontSize: 18,
+                        color: Colors.white70,
+                      ),
+                      textAlign: TextAlign.justify,
+                    ),
+                    const SizedBox(height: 20),
+                    Text(
+                      'Location: $location',
+                      style: const TextStyle(
+                        fontSize: 16,
+                        color: Colors.white,
+                      ),
+                    ),
+                    const SizedBox(height: 10),
+                    Text(
+                      'Date: $date',
+                      style: const TextStyle(
+                        fontSize: 16,
+                        color: Colors.white,
+                      ),
+                    ),
+                  ],
                 ),
               ),
             ),
