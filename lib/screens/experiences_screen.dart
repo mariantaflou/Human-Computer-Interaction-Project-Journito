@@ -104,9 +104,10 @@ class ExperiencesScreen extends StatelessWidget {
                               isLarge: true,
                               experienceData: {
                                 'title': 'Visit the Art Museum',
-                                'description': 'Explore timeless works of art and sculptures.',
-                                'location': 'City Art Museum',
-                                'date': 'January 15, 2025',
+                                'description': 'It houses an extensive collection of sculptures from ancient Greece and Rome.',
+                                'location': 'Leof. Panagioti Kanellopoulou, Athina 115 25, Greece',
+                                'distance': '2.2 kilometers away!',
+                                'what to do': 'You can explore different exhibits, learn about ancient art and culture, and admire the beautiful sculptures.',
                               },
                             ),
                             const SizedBox(height: 30),

@@ -6,17 +6,13 @@ class InformationScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // Extract the arguments passed to this screen
-
-
-    // Use default values if arguments are missing
     final Map<String, String> experienceData =
-      ModalRoute.of(context)?.settings.arguments as Map<String, String>;
+    ModalRoute.of(context)?.settings.arguments as Map<String, String>;
     final title = experienceData['title'] ?? 'Experience';
     final description = experienceData['description'] ?? '';
     final location = experienceData['location'] ?? '';
-    final date = experienceData['date'] ?? '';
-
+    final todo = experienceData['what to do'] ?? '';
+    final distance = experienceData['distance'] ?? '';
 
     return Scaffold(
       body: Container(
@@ -36,8 +32,9 @@ class InformationScreen extends StatelessWidget {
             const SizedBox(height: 40),
             // Header with Journito
             Row(
-              mainAxisAlignment: MainAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
+                Container(width: 56), // Balances layout
                 GestureDetector(
                   onTap: () {
                     Navigator.pushNamed(context, '/home');
@@ -52,16 +49,36 @@ class InformationScreen extends StatelessWidget {
                     ),
                   ),
                 ),
+                Padding(
+                  padding: const EdgeInsets.only(right: 16),
+                  child: CircleAvatar(
+                    radius: 20,
+                    backgroundColor: Colors.white,
+                    child: IconButton(
+                      icon: const Icon(Icons.person, color: Colors.grey),
+                      onPressed: () {
+                        // Navigate to Profile screen if needed
+                      },
+                    ),
+                  ),
+                ),
               ],
             ),
-            const SizedBox(height: 20),
-            // Experience Information
+            const SizedBox(height: 50),
+            // Main Content Area
             Expanded(
-              child: Padding(
-                padding: const EdgeInsets.all(16),
+              child: Container(
+                decoration: const BoxDecoration(
+                  color: Color(0xff52717B),
+                  borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(45),
+                    topRight: Radius.circular(45),
+                  ),
+                ),
                 child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
+                    const SizedBox(height: 20),
+                    // Title
                     Text(
                       title,
                       style: const TextStyle(
@@ -69,59 +86,133 @@ class InformationScreen extends StatelessWidget {
                         color: Colors.white,
                         fontWeight: FontWeight.bold,
                       ),
-                      textAlign: TextAlign.center,
                     ),
                     const SizedBox(height: 20),
-                    Text(
-                      description,
-                      style: const TextStyle(
-                        fontSize: 18,
-                        color: Colors.white70,
+                    // Information Container
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 20),
+                      child: Container(
+                        padding: const EdgeInsets.all(20),
+                        decoration: BoxDecoration(
+                          color: const Color(0xff6A838B),
+                          borderRadius: BorderRadius.circular(20),
+                        ),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            // Information Section
+                            const Text(
+                              'Information:',
+                              style: TextStyle(
+                                fontSize: 18,
+                                color: Colors.white,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                            const SizedBox(height: 10),
+                            Text(
+                              description,
+                              style: const TextStyle(
+                                fontSize: 16,
+                                color: Colors.white,
+                              ),
+                            ),
+                            const SizedBox(height: 20),
+
+                            // Distance Section
+                            const Text(
+                              'Distance:',
+                              style: TextStyle(
+                                fontSize: 18,
+                                color: Colors.white,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                            const SizedBox(height: 10),
+                            Text(
+                              distance,
+                              style: const TextStyle(
+                                fontSize: 16,
+                                color: Colors.white,
+                              ),
+                            ),
+                            const SizedBox(height: 20),
+
+                            // Location Section
+                            const Text(
+                              'Location:',
+                              style: TextStyle(
+                                fontSize: 18,
+                                color: Colors.white,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                            const SizedBox(height: 10),
+                            Text(
+                              location,
+                              style: const TextStyle(
+                                fontSize: 16,
+                                color: Colors.white,
+                              ),
+                            ),
+                            const SizedBox(height: 20),
+
+                            // What to do Section
+                            const Text(
+                              'What to do:',
+                              style: TextStyle(
+                                fontSize: 18,
+                                color: Colors.white,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                            const SizedBox(height: 10),
+                            Text(
+                              todo,
+                              style: const TextStyle(
+                                fontSize: 16,
+                                color: Colors.white,
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
-                      textAlign: TextAlign.justify,
                     ),
-                    const SizedBox(height: 20),
-                    Text(
-                      'Location: $location',
-                      style: const TextStyle(
-                        fontSize: 16,
-                        color: Colors.white,
-                      ),
-                    ),
-                    const SizedBox(height: 10),
-                    Text(
-                      'Date: $date',
-                      style: const TextStyle(
-                        fontSize: 16,
-                        color: Colors.white,
+                    const Spacer(),
+                    // Bottom Buttons
+                    Padding(
+                      padding: const EdgeInsets.only(bottom: 0, left: 16.0, right: 0),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          // Done Button
+                          ElevatedButton(
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: const Color(0xffc9a77a),
+                              padding: const EdgeInsets.symmetric(
+                                  vertical: 15, horizontal: 30),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(30),
+                              ),
+                            ),
+                            onPressed: () {
+                              Navigator.pushNamed(context, '/experiences');
+                            },
+                            child: const Text(
+                              'Explore more',
+                              style: TextStyle(fontSize: 16, color: Color(0xff2d4d4e)),
+                            ),
+                          ),
+                          // AI Button
+                          buildAIButton(context),
+                        ],
                       ),
                     ),
                   ],
                 ),
               ),
             ),
-            // Done Button
-            Padding(
-              padding: const EdgeInsets.all(16),
-              child: ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: const Color(0xffc9a77a),
-                  padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 40),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(15),
-                  ),
-                ),
-                onPressed: () {
-                  Navigator.pushNamed(context, '/journaling');
-                },
-                child: const Text(
-                  'Done? Start Journaling',
-                  style: TextStyle(fontSize: 18, color: Colors.white),
-                ),
-              ),
-            ),
-            // AI Chat Button
-            buildAIButton(context),
           ],
         ),
       ),
