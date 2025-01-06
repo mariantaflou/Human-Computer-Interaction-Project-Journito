@@ -4,15 +4,45 @@ import '../widgets/ai_button.dart';
 class InformationScreen extends StatelessWidget {
   const InformationScreen({super.key});
 
+  Widget _buildSection(String title, String? content) {
+    if (content == null || content.isEmpty) {
+      return const SizedBox.shrink();
+    }
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          title,
+          style: const TextStyle(
+            fontSize: 18,
+            color: Colors.white,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        const SizedBox(height: 10),
+        Text(
+          content,
+          style: const TextStyle(
+            fontSize: 16,
+            color: Colors.white,
+          ),
+        ),
+        const SizedBox(height: 20),
+      ],
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final Map<String, String> experienceData =
     ModalRoute.of(context)?.settings.arguments as Map<String, String>;
     final title = experienceData['title'] ?? 'Experience';
-    final description = experienceData['description'] ?? '';
-    final location = experienceData['location'] ?? '';
-    final todo = experienceData['what to do'] ?? '';
-    final distance = experienceData['distance'] ?? '';
+    final description = experienceData['description'];
+    final location = experienceData['location'];
+    final todo = experienceData['what to do'];
+    final distance = experienceData['distance'];
+    final screenWidth = MediaQuery.of(context).size.width;
+    final containerWidth = screenWidth * 0.8; // 80% of screen width
 
     return Scaffold(
       body: Container(
@@ -88,98 +118,34 @@ class InformationScreen extends StatelessWidget {
                       ),
                     ),
                     const SizedBox(height: 20),
-                    // Information Container
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 20),
-                      child: Container(
-                        padding: const EdgeInsets.all(20),
-                        decoration: BoxDecoration(
-                          color: const Color(0xff6A838B),
-                          borderRadius: BorderRadius.circular(20),
-                        ),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            // Information Section
-                            const Text(
-                              'Information:',
-                              style: TextStyle(
-                                fontSize: 18,
-                                color: Colors.white,
-                                fontWeight: FontWeight.bold,
+                    // Scrollable Information Container
+                    Expanded(
+                      child: SingleChildScrollView(
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 20),
+                          child: SizedBox( // Add SizedBox to fix the width
+                            width: 400, // Set the fixed width
+                            child: Container(
+                              padding: const EdgeInsets.all(20),
+                              decoration: BoxDecoration(
+                                color: const Color(0xff6A838B),
+                                borderRadius: BorderRadius.circular(20),
+                              ),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  _buildSection('Information:', description),
+                                  _buildSection('Distance:', distance),
+                                  _buildSection('Location:', location),
+                                  _buildSection('What to do:', todo),
+                                ],
                               ),
                             ),
-                            const SizedBox(height: 10),
-                            Text(
-                              description,
-                              style: const TextStyle(
-                                fontSize: 16,
-                                color: Colors.white,
-                              ),
-                            ),
-                            const SizedBox(height: 20),
-
-                            // Distance Section
-                            const Text(
-                              'Distance:',
-                              style: TextStyle(
-                                fontSize: 18,
-                                color: Colors.white,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                            const SizedBox(height: 10),
-                            Text(
-                              distance,
-                              style: const TextStyle(
-                                fontSize: 16,
-                                color: Colors.white,
-                              ),
-                            ),
-                            const SizedBox(height: 20),
-
-                            // Location Section
-                            const Text(
-                              'Location:',
-                              style: TextStyle(
-                                fontSize: 18,
-                                color: Colors.white,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                            const SizedBox(height: 10),
-                            Text(
-                              location,
-                              style: const TextStyle(
-                                fontSize: 16,
-                                color: Colors.white,
-                              ),
-                            ),
-                            const SizedBox(height: 20),
-
-                            // What to do Section
-                            const Text(
-                              'What to do:',
-                              style: TextStyle(
-                                fontSize: 18,
-                                color: Colors.white,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                            const SizedBox(height: 10),
-                            Text(
-                              todo,
-                              style: const TextStyle(
-                                fontSize: 16,
-                                color: Colors.white,
-                              ),
-                            ),
-                          ],
+                          ),
                         ),
                       ),
                     ),
-                    const Spacer(),
                     // Bottom Buttons
                     Padding(
                       padding: const EdgeInsets.only(bottom: 0, left: 16.0, right: 0),
