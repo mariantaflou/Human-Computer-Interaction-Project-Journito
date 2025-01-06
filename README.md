@@ -1,4 +1,4 @@
 # journito
 
-A new Flutter project.
+A new Flutter project. ece ntua 
 
