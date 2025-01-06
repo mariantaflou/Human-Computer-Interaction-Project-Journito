@@ -50,46 +50,130 @@ class _TasksScreenState extends State<TasksScreen> {
         child: Column(
           children: [
             const SizedBox(height: 40),
-            _buildHeader(context),
-            const SizedBox(height: 20),
-            const Text(
-              "Today's Tasks",
-              style: TextStyle(
-                fontSize: 28,
-                fontWeight: FontWeight.bold,
-                color: Colors.white,
-              ),
+            // Title and Profile Icon
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Container(width: 56), // Balances layout
+                GestureDetector(
+                  onTap: () {
+                    Navigator.pushNamedAndRemoveUntil(
+                      context,
+                      '/home', // Navigate to HomeScreen
+                          (Route<dynamic> route) => false, // Clear all routes
+                    );
+                  },
+                  child: const Text(
+                    'Journito',
+                    style: TextStyle(
+                      fontFamily: 'Cursive',
+                      fontSize: 45,
+                      fontWeight: FontWeight.bold,
+                      color: Color(0xFFC09B80),
+                    ),
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(right: 16),
+                  child: CircleAvatar(
+                    radius: 20,
+                    backgroundColor: Colors.white,
+                    child: IconButton(
+                      icon: const Icon(Icons.person, color: Colors.grey),
+                      onPressed: () {
+                        // Navigate to Profile screen if needed
+                      },
+                    ),
+                  ),
+                ),
+              ],
             ),
             const SizedBox(height: 20),
             Expanded(
-              child: ListView.builder(
-                itemCount: tasks.length,
-                itemBuilder: (context, index) {
-                  return TaskWidget(
-                    task: tasks[index],
-                    onDelete: () {
-                      setState(() {
-                        tasks.removeAt(index);
-                      });
-                    },
-                  );
-                },
+              child: Container(
+                decoration: const BoxDecoration(
+                  color: Color(0xff52717B),
+                  borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(45),
+                    topRight: Radius.circular(45),
+                    bottomLeft: Radius.zero, // Set bottom-left to 0
+                    bottomRight: Radius.zero, // Set bottom-right to 0
+                  ),
+                ),
+                child: Column(
+                  children: [
+                    const Padding(
+                      padding: EdgeInsets.symmetric(vertical: 16),
+                      child: Text(
+                        "Today's Tasks",
+                        style: TextStyle(
+                          fontSize: 24,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.white,
+                        ),
+                      ),
+                    ),
+                    Expanded(
+                      child: ListView.builder(
+                        itemCount: tasks.length,
+                        itemBuilder: (context, index) {
+                          return TaskWidget(
+                            task: tasks[index],
+                            onDelete: () {
+                              setState(() {
+                                tasks.removeAt(index);
+                              });
+                            },
+                          );
+                        },
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(bottom: 0, left: 16.0, right: 0),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          GestureDetector(
+                            onTap: _addNewTask,
+                            child: Container(
+                              width: 60,
+                              height: 60,
+                              decoration: BoxDecoration(
+                                color: const Color(0xffc9a77a),
+                                borderRadius: BorderRadius.circular(15),
+                                boxShadow: [
+                                  BoxShadow(
+                                    color: Colors.black.withOpacity(0.2),
+                                    blurRadius: 4,
+                                    offset: const Offset(0, 2),
+                                  ),
+                                ],
+                              ),
+                              child: const Center(
+                                child: Icon(
+                                  Icons.add,
+                                  size: 30,
+                                  color: Color(0xff2d4d4e),
+                                ),
+                              ),
+                            ),
+                          ),
+                          buildAIButton(context),
+                        ],
+                      ),
+                    ),
+
+                  ],
+                ),
               ),
             ),
-            // AI Button
-            buildAIButton(context),
-            const SizedBox(height: 16), // Add some padding at the bottom
           ],
         ),
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _addNewTask,
-        backgroundColor: const Color(0xffc9a77a),
-        child: const Icon(Icons.add, color: Colors.white, size: 30),
-      ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.startFloat,
     );
   }
+}
+
 
   Widget _buildHeader(BuildContext context) {
     return Row(
@@ -128,7 +212,7 @@ class _TasksScreenState extends State<TasksScreen> {
       ],
     );
   }
-}
+
 
 // Task Object
 class Task {
@@ -199,7 +283,7 @@ class _TaskWidgetState extends State<TaskWidget> {
       padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 20),
       decoration: BoxDecoration(
         color: const Color(0xffc9a77a),
-        borderRadius: BorderRadius.circular(15),
+        borderRadius: BorderRadius.circular(30),
       ),
       child: Column(
         children: [

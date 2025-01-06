@@ -8,47 +8,84 @@ class ExperiencesScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Container(
-        decoration: const BoxDecoration(
-          gradient: LinearGradient(
-            begin: Alignment.topCenter,
-            end: Alignment.bottomCenter,
-            colors: [
-              Color(0xff1f3f42),
-              Color(0xff2d4d4e),
-              Color(0xff52717b),
-            ],
-          ),
-        ),
-        child: Column(
-          children: [
-            Padding(
-              padding: const EdgeInsets.only(top: 40),
-              child: Center(
-                child: GestureDetector(
-                  onTap: () {
-                    Navigator.pop(context);
-                  },
-                  child: const Text(
-                    'Journito',
-                    style: TextStyle(
-                      fontFamily: 'Cursive',
-                      fontSize: 45,
-                      fontWeight: FontWeight.bold,
-                      color: Color(0xFFC09B80),
-                    ),
-                  ),
-                ),
-              ),
-            ),
-            const SizedBox(height: 20),
-            const Text(
-              'Find Experiences',
-              style: TextStyle(
-                fontSize: 22,
-                color: Colors.white,
-              ),
-            ),
-            const SizedBox(height: 10),
+      decoration: const BoxDecoration(
+      gradient: LinearGradient(
+      begin: Alignment.topCenter,
+      end: Alignment.bottomCenter,
+      colors: [
+        Color(0xff1f3f42),
+        Color(0xff2d4d4e),
+        Color(0xff52717b),
+      ],
+    ),
+    ),
+    child: Column(
+    children: [
+    const SizedBox(height: 40),
+    // Title and Profile Icon
+    Row(
+    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+    children: [
+    Container(width: 56), // Balances layout
+    GestureDetector(
+    onTap: () {
+    Navigator.pushNamedAndRemoveUntil(
+    context,
+    '/home', // Navigate to HomeScreen
+    (Route<dynamic> route) => false, // Clear all routes
+    );
+    },
+    child: const Text(
+    'Journito',
+    style: TextStyle(
+    fontFamily: 'Cursive',
+    fontSize: 45,
+    fontWeight: FontWeight.bold,
+    color: Color(0xFFC09B80),
+    ),
+    ),
+    ),
+    Padding(
+    padding: const EdgeInsets.only(right: 16),
+    child: CircleAvatar(
+    radius: 20,
+    backgroundColor: Colors.white,
+    child: IconButton(
+    icon: const Icon(Icons.person, color: Colors.grey),
+    onPressed: () {
+    // Navigate to Profile screen if needed
+    },
+    ),
+    ),
+    ),
+    ],
+    ),
+    const SizedBox(height: 20),
+    // Chat Area
+    Expanded(
+    child: Container(
+    decoration: const BoxDecoration(
+    color: Color(0xff52717B),
+    borderRadius: BorderRadius.only(
+    topLeft: Radius.circular(45),
+    topRight: Radius.circular(45),
+    bottomLeft: Radius.zero, // Set bottom-left to 0
+    bottomRight: Radius.zero, // Set bottom-right to 0
+    ),
+    ),
+    child: Column(
+    children: [
+    const Padding(
+    padding: EdgeInsets.symmetric(vertical: 16),
+    child: Text(
+    'Find Experiences',
+    style: TextStyle(
+    fontSize: 24,
+    fontWeight: FontWeight.bold,
+    color: Colors.white,
+    ),
+    ),
+    ),
             Expanded(
               child: Container(
                 decoration: const BoxDecoration(
@@ -147,6 +184,10 @@ class ExperiencesScreen extends StatelessWidget {
           ],
         ),
       ),
+    ),
+      ],
+    ),
+      ),
     );
   }
 
@@ -160,15 +201,11 @@ class ExperiencesScreen extends StatelessWidget {
       height: isLarge ? 120 : 100,
       child: ElevatedButton(
         style: ElevatedButton.styleFrom(
-          backgroundColor: const Color(0xffCDA68A),
-          padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 5),
+          backgroundColor: const Color(0xffc9a77a),
+          padding: const EdgeInsets.symmetric(
+              horizontal: 5, vertical: 5),
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.only(
-              topLeft: Radius.circular(30),
-              topRight: Radius.circular(30),
-              bottomLeft: Radius.circular(30),
-              bottomRight: Radius.circular(5),
-            ),
+            borderRadius: BorderRadius.circular(30),
           ),
         ),
         onPressed: () {
