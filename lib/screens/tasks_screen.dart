@@ -111,7 +111,8 @@ class _TasksScreenState extends State<TasksScreen> {
                 ),
               ],
             ),
-            const SizedBox(height: 20),
+            //Tasks area
+            const SizedBox(height: 50),
             Expanded(
               child: Container(
                 decoration: const BoxDecoration(

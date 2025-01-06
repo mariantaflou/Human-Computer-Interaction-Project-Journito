@@ -67,7 +67,7 @@ class _ChatWithAIScreenState extends State<ChatWithAIScreen> {
                 ),
               ],
             ),
-            const SizedBox(height: 20),
+            const SizedBox(height: 50),
             // Chat Area
             Expanded(
               child: Container(
