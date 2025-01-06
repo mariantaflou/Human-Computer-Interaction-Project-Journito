@@ -40,7 +40,7 @@ class ExperiencesScreen extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 20),
-            Text( // Changed to Text and applied style
+            const Text(
               'Find Experiences',
               style: TextStyle(
                 fontSize: 22,
@@ -60,26 +60,81 @@ class ExperiencesScreen extends StatelessWidget {
                 padding: const EdgeInsets.fromLTRB(40, 20, 40, 0),
                 child: Column(
                   children: [
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 0), // Removed extra padding
-                      child: _buildExperienceButton(context, label: 'Visit the Art Museum', isLarge: true),
+                    _buildExperienceButton(
+                      context,
+                      label: 'Visit the Art Museum',
+                      isLarge: true,
+                      experienceData: {
+                        'title': 'Visit the Art Museum',
+                        'description': 'Explore timeless works of art and sculptures.',
+                        'location': 'City Art Museum',
+                        'date': 'January 15, 2025',
+                      },
                     ),
                     const SizedBox(height: 20),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Expanded(child: _buildExperienceButton(context, label: 'Walk at the nearest Park', isLarge: false)),
+                        Expanded(
+                          child: _buildExperienceButton(
+                            context,
+                            label: 'Walk at the nearest Park',
+                            isLarge: false,
+                            experienceData: {
+                              'title': 'Park Walk',
+                              'description': 'Take a refreshing walk surrounded by nature.',
+                              'location': 'Green Meadows Park',
+                              'date': 'January 12, 2025',
+                            },
+                          ),
+                        ),
                         const SizedBox(width: 20),
-                        Expanded(child: _buildExperienceButton(context, label: 'Watch Netflix', isLarge: false)),
+                        Expanded(
+                          child: _buildExperienceButton(
+                            context,
+                            label: 'Watch Netflix',
+                            isLarge: false,
+                            experienceData: {
+                              'title': 'Netflix Binge',
+                              'description': 'Catch up on your favorite series and movies.',
+                              'location': 'Your Living Room',
+                              'date': 'Anytime',
+                            },
+                          ),
+                        ),
                       ],
                     ),
                     const SizedBox(height: 20),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Expanded(child: _buildExperienceButton(context, label: 'Ride a Bike', isLarge: false)),
+                        Expanded(
+                          child: _buildExperienceButton(
+                            context,
+                            label: 'Ride a Bike',
+                            isLarge: false,
+                            experienceData: {
+                              'title': 'Bike Ride',
+                              'description': 'Enjoy a fun and adventurous bike ride.',
+                              'location': 'Hillside Trail',
+                              'date': 'January 18, 2025',
+                            },
+                          ),
+                        ),
                         const SizedBox(width: 20),
-                        Expanded(child: _buildExperienceButton(context, label: 'Continue the Puzzle', isLarge: false)),
+                        Expanded(
+                          child: _buildExperienceButton(
+                            context,
+                            label: 'Continue the Puzzle',
+                            isLarge: false,
+                            experienceData: {
+                              'title': 'Puzzle Time',
+                              'description': 'Relax and solve a challenging puzzle.',
+                              'location': 'Your Cozy Corner',
+                              'date': 'Anytime',
+                            },
+                          ),
+                        ),
                       ],
                     ),
                   ],
@@ -126,7 +181,12 @@ class ExperiencesScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildExperienceButton(BuildContext context, {required String label, required bool isLarge}) {
+  Widget _buildExperienceButton(
+      BuildContext context, {
+        required String label,
+        required bool isLarge,
+        required Map<String, String> experienceData,
+      }) {
     return SizedBox(
       height: isLarge ? 120 : 100,
       child: ElevatedButton(
@@ -143,7 +203,11 @@ class ExperiencesScreen extends StatelessWidget {
           ),
         ),
         onPressed: () {
-          Navigator.pushNamed(context, '/information');
+          Navigator.pushNamed(
+            context,
+            '/information',
+            arguments: experienceData,
+          );
         },
         child: Text(
           label,
