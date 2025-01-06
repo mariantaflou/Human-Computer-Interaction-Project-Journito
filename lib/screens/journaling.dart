@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'dart:io';
+import '../widgets/ai_button.dart';
 
 class JournalingScreen extends StatefulWidget {
   const JournalingScreen({super.key});
@@ -202,7 +203,7 @@ class _JournalingScreenState extends State<JournalingScreen> {
             _saveJournal();
             Navigator.pop(context);
           }),
-          _buildAIButton(context),
+          buildAIButton(context),  // AI Button
         ],
       ),
     );
@@ -250,39 +251,6 @@ class _JournalingScreenState extends State<JournalingScreen> {
     );
   }
 
-  // AI Button
-  Widget _buildAIButton(BuildContext context) {
-    return GestureDetector(
-      onTap: () {
-        Navigator.pushNamed(context, '/ai_chat');
-      },
-      child: Container(
-        width: 60,
-        height: 60,
-        decoration: BoxDecoration(
-          color: const Color(0xffc9a77a),
-          borderRadius: BorderRadius.circular(15),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black.withOpacity(0.2),
-              blurRadius: 4,
-              offset: const Offset(0, 2),
-            ),
-          ],
-        ),
-        child: const Center(
-          child: Text(
-            'AI',
-            style: TextStyle(
-              fontWeight: FontWeight.bold,
-              fontSize: 16,
-              color: Color(0xff2d4d4e),
-            ),
-          ),
-        ),
-      ),
-    );
-  }
 
   // Format Date Function
   String _formattedDate() {

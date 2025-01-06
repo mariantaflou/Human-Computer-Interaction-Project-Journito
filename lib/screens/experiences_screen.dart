@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../widgets/ai_button.dart';
 
 class ExperiencesScreen extends StatelessWidget {
   const ExperiencesScreen({super.key});
@@ -141,40 +142,8 @@ class ExperiencesScreen extends StatelessWidget {
                 ),
               ),
             ),
-            Padding(
-              padding: const EdgeInsets.all(16),
-              child: Align(
-                alignment: Alignment.bottomRight,
-                child: GestureDetector(
-                  onTap: () {
-                    Navigator.pushNamed(context, '/ai_chat');
-                  },
-                  child: Container(
-                    width: 60,
-                    height: 60,
-                    decoration: const BoxDecoration(
-                      color: Color(0xffc9a77a),
-                      borderRadius: BorderRadius.only(
-                        topLeft: Radius.circular(15),
-                        topRight: Radius.circular(15),
-                        bottomLeft: Radius.circular(15),
-                        bottomRight: Radius.circular(5),
-                      ),
-                    ),
-                    child: const Center(
-                      child: Text(
-                        'AI',
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 16,
-                          color: Color(0xff2d4d4e),
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-              ),
-            ),
+            // AI Button
+            buildAIButton(context),
           ],
         ),
       ),

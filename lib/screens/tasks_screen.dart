@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../widgets/ai_button.dart';
 
 class TasksScreen extends StatefulWidget {
   const TasksScreen({super.key});
@@ -10,8 +11,14 @@ class TasksScreen extends StatefulWidget {
 class _TasksScreenState extends State<TasksScreen> {
   // List of tasks with their details
   final List<Task> tasks = [
-    Task(title: 'Call Mom', time: '10:00 AM', location: 'Home', notes: 'Wish her happy birthday'),
-    Task(title: 'Water the Flowers', time: '6:00 PM', location: 'Garden', notes: 'Focus on the roses'),
+    Task(title: 'Call Mom',
+        time: '10:00 AM',
+        location: 'Home',
+        notes: 'Wish her happy birthday'),
+    Task(title: 'Water the Flowers',
+        time: '6:00 PM',
+        location: 'Garden',
+        notes: 'Focus on the roses'),
   ];
 
   void _addNewTask() {
@@ -28,11 +35,6 @@ class _TasksScreenState extends State<TasksScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      floatingActionButton: FloatingActionButton(
-        onPressed: _addNewTask,
-        backgroundColor: const Color(0xffc9a77a),
-        child: const Icon(Icons.add, color: Colors.white, size: 30),
-      ),
       body: Container(
         decoration: const BoxDecoration(
           gradient: LinearGradient(
@@ -74,10 +76,18 @@ class _TasksScreenState extends State<TasksScreen> {
                 },
               ),
             ),
-            _buildBottomButtons(),
+            // AI Button
+            buildAIButton(context),
+            const SizedBox(height: 16), // Add some padding at the bottom
           ],
         ),
       ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: _addNewTask,
+        backgroundColor: const Color(0xffc9a77a),
+        child: const Icon(Icons.add, color: Colors.white, size: 30),
+      ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.startFloat,
     );
   }
 
@@ -91,7 +101,7 @@ class _TasksScreenState extends State<TasksScreen> {
             Navigator.pushNamedAndRemoveUntil(
               context,
               '/home',
-              (Route<dynamic> route) => false,
+                  (Route<dynamic> route) => false,
             );
           },
           child: const Text(
@@ -112,40 +122,6 @@ class _TasksScreenState extends State<TasksScreen> {
             child: IconButton(
               icon: const Icon(Icons.person, color: Colors.grey),
               onPressed: () {},
-            ),
-          ),
-        ),
-      ],
-    );
-  }
-
-  Widget _buildBottomButtons() {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: GestureDetector(
-            onTap: () {
-              Navigator.pushNamed(context, '/ai_chat');
-            },
-            child: Container(
-              width: 50,
-              height: 50,
-              decoration: BoxDecoration(
-                color: const Color(0xffc9a77a),
-                borderRadius: BorderRadius.circular(10),
-              ),
-              child: const Center(
-                child: Text(
-                  'AI',
-                  style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 16,
-                    color: Color(0xff2d4d4e),
-                  ),
-                ),
-              ),
             ),
           ),
         ),

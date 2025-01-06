@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../widgets/ai_button.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
@@ -25,7 +26,6 @@ class HomeScreen extends StatelessWidget {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                // Empty container to balance the layout
                 Container(width: 56), // Same width as the CircleAvatar
                 const Text(
                   'Journito',
@@ -66,7 +66,6 @@ class HomeScreen extends StatelessWidget {
                   },
                 ),
                 GestureDetector(
-                  // Wrap Text with GestureDetector
                   onTap: () {
                     Navigator.pushNamed(context, '/calendar');
                   },
@@ -93,7 +92,8 @@ class HomeScreen extends StatelessWidget {
                 Navigator.pushNamed(context, '/journaling');
               },
               child: Container(
-                padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 15),
+                padding: const EdgeInsets.symmetric(
+                    vertical: 10, horizontal: 15),
                 margin: const EdgeInsets.symmetric(horizontal: 40),
                 decoration: BoxDecoration(
                   color: const Color(0xff4d6d6d),
@@ -121,7 +121,8 @@ class HomeScreen extends StatelessWidget {
                   child: ElevatedButton(
                     style: ElevatedButton.styleFrom(
                       backgroundColor: const Color(0xffc9a77a),
-                      padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 5),
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 5, vertical: 5),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(30),
                       ),
@@ -144,13 +145,13 @@ class HomeScreen extends StatelessWidget {
                   child: ElevatedButton(
                     style: ElevatedButton.styleFrom(
                       backgroundColor: const Color(0xffc9a77a),
-                      padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 5),
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 5, vertical: 5),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(30),
                       ),
                     ),
                     onPressed: () {
-                      // Add navigation to the experiences screen
                       Navigator.pushNamed(context, '/experiences');
                     },
                     child: const Text(
@@ -166,44 +167,12 @@ class HomeScreen extends StatelessWidget {
               ],
             ),
             const Spacer(),
-            // AI Chat Button
-            Align(
-              alignment: Alignment.bottomRight,
-              child: Padding(
-                padding: const EdgeInsets.all(16),
-                child: GestureDetector(
-                  onTap: () {
-                    Navigator.pushNamed(context, '/ai_chat');
-                  },
-                  child: Container(
-                    width: 60,
-                    height: 60,
-                    decoration: const BoxDecoration(
-                      color: Color(0xffc9a77a),
-                      borderRadius: BorderRadius.only(
-                        topLeft: Radius.circular(15),
-                        topRight: Radius.circular(15),
-                        bottomLeft: Radius.circular(15),
-                        bottomRight: Radius.circular(5),
-                      ),
-                    ),
-                    child: const Center(
-                      child: Text(
-                        'AI',
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 16,
-                          color: Color(0xff2d4d4e),
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-              ),
-            ),
+            // AI Button
+            buildAIButton(context),
           ],
         ),
       ),
     );
   }
 }
+
