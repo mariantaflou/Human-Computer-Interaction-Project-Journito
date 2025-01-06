@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import '../widgets/ai_button.dart';
 
 class TasksScreen extends StatefulWidget {
   const TasksScreen({super.key});
@@ -111,7 +112,7 @@ class _TasksScreenState extends State<TasksScreen> {
                 ),
               ],
             ),
-            const SizedBox(height: 20),
+            const SizedBox(height: 50),
             Expanded(
               child: Container(
                 decoration: const BoxDecoration(
@@ -147,7 +148,7 @@ class _TasksScreenState extends State<TasksScreen> {
                       ),
                     ),
                     Padding(
-                      padding: const EdgeInsets.only(bottom: 16.0, left: 16.0),
+                      padding: const EdgeInsets.only(bottom: 0, left: 16.0, right: 0),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
@@ -176,9 +177,11 @@ class _TasksScreenState extends State<TasksScreen> {
                               ),
                             ),
                           ),
+                          buildAIButton(context),
                         ],
                       ),
                     ),
+
                   ],
                 ),
               ),
