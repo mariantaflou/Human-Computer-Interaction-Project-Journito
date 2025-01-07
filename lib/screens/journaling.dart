@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'dart:io';
+import 'package:shared_preferences/shared_preferences.dart';
 import '../widgets/ai_button.dart';
 
 class JournalingScreen extends StatefulWidget {
-  const JournalingScreen({super.key});
+  const JournalingScreen({Key? key}) : super(key: key);
 
   @override
   _JournalingScreenState createState() => _JournalingScreenState();
@@ -13,6 +14,51 @@ class JournalingScreen extends StatefulWidget {
 class _JournalingScreenState extends State<JournalingScreen> {
   final TextEditingController _textController = TextEditingController();
   File? _attachedImage;
+  DateTime _currentDate = DateTime.now(); // Initialize with today's date
+
+  @override
+  void initState() {
+    super.initState();
+    _loadJournalEntry();
+  }
+
+  // Load journal entry for the current date
+  Future<void> _loadJournalEntry() async {
+    final prefs = await SharedPreferences.getInstance();
+    final key = _formattedDate();
+    final savedContent = prefs.getString(key) ?? '';
+    setState(() {
+      _textController.text = savedContent;
+    });
+  }
+
+  // Save the journal entry
+  Future<void> _saveJournal() async {
+    final prefs = await SharedPreferences.getInstance();
+    final key = _formattedDate();
+    await prefs.setString(key, _textController.text);
+  }
+
+  // Format the date as a string key
+  String _formattedDate() {
+    return '${_currentDate.year}-${_currentDate.month.toString().padLeft(2, '0')}-${_currentDate.day.toString().padLeft(2, '0')}';
+  }
+
+  // Navigate to the previous date
+  void _navigateToPreviousDate() {
+    setState(() {
+      _currentDate = _currentDate.subtract(const Duration(days: 1));
+      _loadJournalEntry();
+    });
+  }
+
+  // Navigate to the next date
+  void _navigateToNextDate() {
+    setState(() {
+      _currentDate = _currentDate.add(const Duration(days: 1));
+      _loadJournalEntry();
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -33,18 +79,13 @@ class _JournalingScreenState extends State<JournalingScreen> {
         child: Column(
           children: [
             const SizedBox(height: 40),
-            // Title
             _buildTitle(context),
             const SizedBox(height: 20),
-            // Date Section
             _buildDateSection(context),
             const SizedBox(height: 20),
-            // Buttons
             _buildButtonRow(context),
             const SizedBox(height: 20),
-            // Journaling Frame
             _buildJournalingFrame(context),
-            // Bottom Buttons
             _buildBottomButtonRow(context),
           ],
         ),
@@ -52,7 +93,6 @@ class _JournalingScreenState extends State<JournalingScreen> {
     );
   }
 
-  // Title
   Widget _buildTitle(BuildContext context) {
     return GestureDetector(
       onTap: () {
@@ -74,16 +114,12 @@ class _JournalingScreenState extends State<JournalingScreen> {
     );
   }
 
-  // Date Section
   Widget _buildDateSection(BuildContext context) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         IconButton(
-          onPressed: () {
-            // Navigate to the previous date
-            _navigateToPreviousDate(context);
-          },
+          onPressed: _navigateToPreviousDate,
           icon: const Icon(
             Icons.arrow_back_ios_new,
             color: Colors.white,
@@ -94,7 +130,7 @@ class _JournalingScreenState extends State<JournalingScreen> {
             Navigator.pushNamed(context, '/calendar');
           },
           child: Text(
-            _formattedDate(),
+            '${_dayOfWeek(_currentDate.weekday)}, ${_currentDate.day} ${_monthOfYear(_currentDate.month)} ${_currentDate.year}',
             style: const TextStyle(
               color: Colors.white,
               fontSize: 20,
@@ -103,10 +139,7 @@ class _JournalingScreenState extends State<JournalingScreen> {
           ),
         ),
         IconButton(
-          onPressed: () {
-            // Navigate to the next date
-            _navigateToNextDate(context);
-          },
+          onPressed: _navigateToNextDate,
           icon: const Icon(
             Icons.arrow_forward_ios,
             color: Colors.white,
@@ -116,7 +149,6 @@ class _JournalingScreenState extends State<JournalingScreen> {
     );
   }
 
-  // Button Row
   Widget _buildButtonRow(BuildContext context) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -127,7 +159,6 @@ class _JournalingScreenState extends State<JournalingScreen> {
     );
   }
 
-  // Journaling Frame
   Widget _buildJournalingFrame(BuildContext context) {
     return Expanded(
       child: Padding(
@@ -160,29 +191,20 @@ class _JournalingScreenState extends State<JournalingScreen> {
                   style: const TextStyle(color: Colors.white),
                 ),
               ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  if (_attachedImage != null)
-                    Expanded(
-                      child: Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Image.file(
-                          _attachedImage!,
-                          fit: BoxFit.contain,
-                        ),
-                      ),
-                    ),
-                  IconButton(
-                    onPressed: () {
-                      _attachPicture(context);
-                    },
-                    icon: const Icon(
-                      Icons.attach_file,
-                      color: Colors.white,
-                    ),
+              if (_attachedImage != null)
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Image.file(
+                    _attachedImage!,
+                    fit: BoxFit.contain,
                   ),
-                ],
+                ),
+              IconButton(
+                onPressed: _attachPicture,
+                icon: const Icon(
+                  Icons.attach_file,
+                  color: Colors.white,
+                ),
               ),
             ],
           ),
@@ -191,25 +213,36 @@ class _JournalingScreenState extends State<JournalingScreen> {
     );
   }
 
-  // Bottom Button Row
   Widget _buildBottomButtonRow(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.all(16.0),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          _buildBottomButton(Icons.check, 'Finish', () {
-            // Add finish editing logic
-            _saveJournal();
-            Navigator.pop(context);
-          }),
-          buildAIButton(context),  // AI Button
+          ElevatedButton.icon(
+            onPressed: () async {
+              await _saveJournal();
+              Navigator.pop(context);
+            },
+            icon: const Icon(Icons.check, color: Color(0xff1f3f42)),
+            label: const Text(
+              'Finish',
+              style: TextStyle(color: Color(0xff1f3f42)),
+            ),
+            style: ElevatedButton.styleFrom(
+              backgroundColor: const Color(0xffc9a77a),
+              minimumSize: const Size(120, 48),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(25),
+              ),
+            ),
+          ),
+          buildAIButton(context), // AI Button
         ],
       ),
     );
   }
 
-  // Button Builder
   Widget _buildButton(BuildContext context, String title, String route) {
     return ElevatedButton(
       onPressed: () {
@@ -232,32 +265,6 @@ class _JournalingScreenState extends State<JournalingScreen> {
     );
   }
 
-  // Finish Button
-  Widget _buildBottomButton(IconData icon, String label, VoidCallback onPressed) {
-    return ElevatedButton.icon(
-      onPressed: onPressed,
-      icon: Icon(icon, color: const Color(0xff1f3f42)),
-      label: Text(
-        label,
-        style: const TextStyle(color: Color(0xff1f3f42)),
-      ),
-      style: ElevatedButton.styleFrom(
-        backgroundColor: const Color(0xffc9a77a),
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(25),
-        ),
-        minimumSize: const Size(120, 48),
-      ),
-    );
-  }
-
-
-  // Format Date Function
-  String _formattedDate() {
-    final now = DateTime.now();
-    return '${_dayOfWeek(now.weekday)} ${now.day} ${_monthOfYear(now.month)} ${now.year}';
-  }
-
   String _dayOfWeek(int day) {
     const days = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
     return days[day - 1];
@@ -271,15 +278,7 @@ class _JournalingScreenState extends State<JournalingScreen> {
     return months[month - 1];
   }
 
-  void _navigateToPreviousDate(BuildContext context) {
-    // Add logic to navigate to the previous date
-  }
-
-  void _navigateToNextDate(BuildContext context) {
-    // Add logic to navigate to the next date
-  }
-
-  void _attachPicture(BuildContext context) async {
+  Future<void> _attachPicture() async {
     final picker = ImagePicker();
     final pickedImage = await picker.pickImage(source: ImageSource.gallery);
     if (pickedImage != null) {
@@ -287,9 +286,5 @@ class _JournalingScreenState extends State<JournalingScreen> {
         _attachedImage = File(pickedImage.path);
       });
     }
-  }
-
-  void _saveJournal() {
-    // Save the journal entry using the _textController.text and _attachedImage
   }
 }

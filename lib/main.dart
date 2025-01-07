@@ -31,7 +31,7 @@ class MyApp extends StatelessWidget {
         '/ai_chat': (context) => const ChatWithAIScreen(),
         '/tasks': (context) => const TasksScreen(),
         '/calendar': (context) => const CalendarScreen(),
-        '/journaling': (context) => const JournalingScreen(),
+        '/journaling': (context) => const JournalingScreen(),//selectedDate: DateTime.now()),
         '/experiences': (context) => const ExperiencesScreen(),
         '/information': (context) => const InformationScreen(),
       },
