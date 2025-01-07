@@ -14,7 +14,7 @@ class JournalingScreen extends StatefulWidget {
 class _JournalingScreenState extends State<JournalingScreen> {
   final TextEditingController _textController = TextEditingController();
   List<File> _attachedImages = [];
-  DateTime _currentDate = DateTime.now(); // Initialize with today's date
+  DateTime _currentDate = DateTime.now();
 
   @override
   void initState() {
@@ -22,7 +22,6 @@ class _JournalingScreenState extends State<JournalingScreen> {
     _loadJournalEntry();
   }
 
-  // Load journal entry for the current date
   Future<void> _loadJournalEntry() async {
     final prefs = await SharedPreferences.getInstance();
     final key = _formattedDate();
@@ -35,22 +34,29 @@ class _JournalingScreenState extends State<JournalingScreen> {
     });
   }
 
-  // Save the journal entry
   Future<void> _saveJournal() async {
     final prefs = await SharedPreferences.getInstance();
     final key = _formattedDate();
+
+    // Save the journal content
     await prefs.setString('${key}_text', _textController.text);
 
+    // Save image paths
     final imagePaths = _attachedImages.map((image) => image.path).toList();
     await prefs.setStringList('${key}_images', imagePaths);
+
+    // Mark the date as logged
+    List<String> loggedDates = prefs.getStringList('logs') ?? [];
+    if (!loggedDates.contains(key)) {
+      loggedDates.add(key);
+      await prefs.setStringList('logs', loggedDates);
+    }
   }
 
-  // Format the date as a string key
   String _formattedDate() {
     return '${_currentDate.year}-${_currentDate.month.toString().padLeft(2, '0')}-${_currentDate.day.toString().padLeft(2, '0')}';
   }
 
-  // Navigate to the previous date
   void _navigateToPreviousDate() {
     setState(() {
       _currentDate = _currentDate.subtract(const Duration(days: 1));
@@ -58,7 +64,6 @@ class _JournalingScreenState extends State<JournalingScreen> {
     });
   }
 
-  // Navigate to the next date
   void _navigateToNextDate() {
     setState(() {
       _currentDate = _currentDate.add(const Duration(days: 1));
@@ -69,7 +74,7 @@ class _JournalingScreenState extends State<JournalingScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      resizeToAvoidBottomInset: true, // Prevent keyboard overlap
+      resizeToAvoidBottomInset: true,
       body: Container(
         decoration: const BoxDecoration(
           gradient: LinearGradient(
@@ -185,7 +190,6 @@ class _JournalingScreenState extends State<JournalingScreen> {
           child: SingleChildScrollView(
             child: Column(
               children: [
-                // Text input area
                 Container(
                   constraints: const BoxConstraints(minHeight: 200),
                   child: TextField(
@@ -201,10 +205,9 @@ class _JournalingScreenState extends State<JournalingScreen> {
                     style: const TextStyle(color: Colors.white),
                   ),
                 ),
-                // Image gallery area
                 if (_attachedImages.isNotEmpty)
                   Container(
-                    height: 150, // Fixed height for image gallery
+                    height: 150,
                     margin: const EdgeInsets.symmetric(vertical: 8),
                     child: ListView.builder(
                       scrollDirection: Axis.horizontal,
@@ -212,7 +215,7 @@ class _JournalingScreenState extends State<JournalingScreen> {
                       itemBuilder: (context, index) {
                         return Container(
                           margin: const EdgeInsets.symmetric(horizontal: 8),
-                          width: 150, // Fixed width for each image
+                          width: 150,
                           child: ClipRRect(
                             borderRadius: BorderRadius.circular(10),
                             child: Image.file(
@@ -224,7 +227,6 @@ class _JournalingScreenState extends State<JournalingScreen> {
                       },
                     ),
                   ),
-                // Attach button
                 Align(
                   alignment: Alignment.centerRight,
                   child: IconButton(
@@ -267,7 +269,7 @@ class _JournalingScreenState extends State<JournalingScreen> {
               ),
             ),
           ),
-          buildAIButton(context), // AI Button
+          buildAIButton(context),
         ],
       ),
     );
@@ -318,4 +320,3 @@ class _JournalingScreenState extends State<JournalingScreen> {
     }
   }
 }
-
