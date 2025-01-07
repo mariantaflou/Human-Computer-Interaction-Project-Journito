@@ -8,9 +8,12 @@ import 'screens/journaling.dart';
 import 'screens/login.dart';
 import 'screens/tasks_screen.dart';
 import 'screens/experiences_screen.dart';
-import 'screens/preferences_screen.dart'; // Import the PreferencesScreen
+import 'screens/preferences_screen.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
+
 
 void main() async {
+  await dotenv.load();
   runApp(MyApp());
 }
 
@@ -31,7 +34,8 @@ class MyApp extends StatelessWidget {
         '/ai_chat': (context) => const ChatWithAIScreen(),
         '/tasks': (context) => const TasksScreen(),
         '/calendar': (context) => const CalendarScreen(),
-        '/journaling': (context) => const JournalingScreen(),//selectedDate: DateTime.now()),
+        //'/journaling': (context) => const JournalingScreen(),
+        '/journaling': (context) => const JournalingScreen(),
         '/experiences': (context) => const ExperiencesScreen(),
         '/information': (context) => const InformationScreen(),
       },

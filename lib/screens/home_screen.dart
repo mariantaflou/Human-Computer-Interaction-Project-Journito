@@ -1,8 +1,42 @@
 import 'package:flutter/material.dart';
 import '../widgets/ai_button.dart';
 
-class HomeScreen extends StatelessWidget {
+class HomeScreen extends StatefulWidget {  // Changed to StatefulWidget
   const HomeScreen({super.key});
+
+  @override
+  State<HomeScreen> createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends State<HomeScreen> {
+  DateTime _currentDate = DateTime.now();  // Add current date
+
+  // Add date formatting helper methods
+  String _dayOfWeek(int day) {
+    const days = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
+    return days[day - 1];
+  }
+
+  String _monthOfYear(int month) {
+    const months = [
+      'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
+      'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'
+    ];
+    return months[month - 1];
+  }
+
+  // Add navigation methods
+  void _navigateToPreviousDate() {
+    setState(() {
+      _currentDate = _currentDate.subtract(const Duration(days: 1));
+    });
+  }
+
+  void _navigateToNextDate() {
+    setState(() {
+      _currentDate = _currentDate.add(const Duration(days: 1));
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -26,7 +60,7 @@ class HomeScreen extends StatelessWidget {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Container(width: 56), // Same width as the CircleAvatar
+                Container(width: 56),
                 const Text(
                   'Journito',
                   style: TextStyle(
@@ -55,23 +89,21 @@ class HomeScreen extends StatelessWidget {
               ],
             ),
             const Spacer(),
-            // Date Navigation
+            // Updated Date Navigation
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 IconButton(
                   icon: const Icon(Icons.chevron_left, color: Colors.white),
-                  onPressed: () {
-                    // Handle left chevron press
-                  },
+                  onPressed: _navigateToPreviousDate,
                 ),
                 GestureDetector(
                   onTap: () {
                     Navigator.pushNamed(context, '/calendar');
                   },
-                  child: const Text(
-                    'Mon 21 Oct 2024',
-                    style: TextStyle(
+                  child: Text(
+                    '${_dayOfWeek(_currentDate.weekday)}, ${_currentDate.day} ${_monthOfYear(_currentDate.month)} ${_currentDate.year}',
+                    style: const TextStyle(
                       fontSize: 22,
                       color: Colors.white,
                     ),
@@ -79,21 +111,18 @@ class HomeScreen extends StatelessWidget {
                 ),
                 IconButton(
                   icon: const Icon(Icons.chevron_right, color: Colors.white),
-                  onPressed: () {
-                    Navigator.pushNamed(context, '/calendar');
-                  },
+                  onPressed: _navigateToNextDate,
                 ),
               ],
             ),
             const SizedBox(height: 20),
-            // Prompt Box
+            // Rest of the widgets remain the same
             GestureDetector(
               onTap: () {
                 Navigator.pushNamed(context, '/journaling');
               },
               child: Container(
-                padding: const EdgeInsets.symmetric(
-                    vertical: 10, horizontal: 15),
+                padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 15),
                 margin: const EdgeInsets.symmetric(horizontal: 40),
                 decoration: BoxDecoration(
                   color: const Color(0xff4d6d6d),
@@ -111,7 +140,6 @@ class HomeScreen extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 40),
-            // Buttons
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
@@ -121,8 +149,7 @@ class HomeScreen extends StatelessWidget {
                   child: ElevatedButton(
                     style: ElevatedButton.styleFrom(
                       backgroundColor: const Color(0xffc9a77a),
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 5, vertical: 5),
+                      padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 5),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(30),
                       ),
@@ -145,8 +172,7 @@ class HomeScreen extends StatelessWidget {
                   child: ElevatedButton(
                     style: ElevatedButton.styleFrom(
                       backgroundColor: const Color(0xffc9a77a),
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 5, vertical: 5),
+                      padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 5),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(30),
                       ),
@@ -167,7 +193,6 @@ class HomeScreen extends StatelessWidget {
               ],
             ),
             const Spacer(),
-            // AI Button
             buildAIButton(context),
           ],
         ),
@@ -175,4 +200,3 @@ class HomeScreen extends StatelessWidget {
     );
   }
 }
-
