@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 class ChatWithAIScreen extends StatefulWidget {
   const ChatWithAIScreen({super.key});
@@ -8,8 +11,70 @@ class ChatWithAIScreen extends StatefulWidget {
 }
 
 class _ChatWithAIScreenState extends State<ChatWithAIScreen> {
-  final List<Map<String, String>> messages = [];
-  final TextEditingController messageController = TextEditingController();
+  final List<Map<String, String>> _messages = [];
+  final TextEditingController _controller = TextEditingController();
+  bool _isLoading = false;
+
+  Future<void> _sendMessage(String userMessage) async {
+    if (userMessage.isEmpty) return;
+
+    setState(() {
+      _messages.add({'role': 'user', 'content': userMessage});
+      _isLoading = true;
+    });
+
+    final apiKey = dotenv.env['OPENAI_API_KEY'];
+
+    if (apiKey == null || apiKey.isEmpty) {
+      setState(() {
+        _messages.add({'role': 'ai', 'content': 'Error: Missing API Key'});
+        _isLoading = false;
+      });
+      return;
+    }
+
+    try {
+      final response = await http.post(
+        Uri.parse('https://api.openai.com/v1/chat/completions'),
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer $apiKey',
+        },
+        body: jsonEncode({
+          'model': 'gpt-3.5-turbo',
+          'messages': [
+            {'role': 'system', 'content': 'You are a helpful assistant.'},
+            {'role': 'user', 'content': userMessage},
+          ],
+          'max_tokens': 150,
+          'temperature': 0.7,
+        }),
+      );
+
+      if (response.statusCode == 200) {
+        final data = jsonDecode(response.body);
+        final aiMessage = data['choices'][0]['message']['content']?.trim() ?? 'No response';
+
+        setState(() {
+          _messages.add({'role': 'ai', 'content': aiMessage});
+        });
+      } else {
+        setState(() {
+          _messages.add({'role': 'ai', 'content': 'Error: ${response.body}'});
+        });
+        print('Error Response: ${response.body}');
+      }
+    } catch (e) {
+      setState(() {
+        _messages.add({'role': 'ai', 'content': 'Error: Unable to fetch response'});
+      });
+      print('Error: $e');
+    } finally {
+      setState(() {
+        _isLoading = false;
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -33,13 +98,13 @@ class _ChatWithAIScreenState extends State<ChatWithAIScreen> {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Container(width: 56), // Balances layout
+                Container(width: 56),
                 GestureDetector(
                   onTap: () {
                     Navigator.pushNamedAndRemoveUntil(
                       context,
-                      '/home', // Navigate to HomeScreen
-                          (Route<dynamic> route) => false, // Clear all routes
+                      '/home',
+                          (Route<dynamic> route) => false,
                     );
                   },
                   child: const Text(
@@ -76,8 +141,6 @@ class _ChatWithAIScreenState extends State<ChatWithAIScreen> {
                   borderRadius: BorderRadius.only(
                     topLeft: Radius.circular(45),
                     topRight: Radius.circular(45),
-                    bottomLeft: Radius.zero, // Set bottom-left to 0
-                    bottomRight: Radius.zero, // Set bottom-right to 0
                   ),
                 ),
                 child: Column(
@@ -93,16 +156,23 @@ class _ChatWithAIScreenState extends State<ChatWithAIScreen> {
                         ),
                       ),
                     ),
+                    if (_isLoading)
+                      const Padding(
+                        padding: EdgeInsets.all(8.0),
+                        child: CircularProgressIndicator(
+                          valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+                        ),
+                      ),
                     Expanded(
                       child: ListView.builder(
                         padding: const EdgeInsets.all(16),
-                        itemCount: messages.length,
+                        itemCount: _messages.length,
                         itemBuilder: (context, index) {
-                          final isUserMessage =
-                              messages[index]['sender'] == 'user';
+                          final message = _messages[index];
+                          final isUser = message['role'] == 'user';
                           return ChatBubble(
-                            message: messages[index]['message'] ?? '',
-                            isUser: isUserMessage,
+                            message: message['content'] ?? '',
+                            isUser: isUser,
                           );
                         },
                       ),
@@ -119,7 +189,7 @@ class _ChatWithAIScreenState extends State<ChatWithAIScreen> {
                 children: [
                   Expanded(
                     child: TextField(
-                      controller: messageController,
+                      controller: _controller,
                       style: const TextStyle(color: Colors.white),
                       decoration: InputDecoration(
                         filled: true,
@@ -137,19 +207,10 @@ class _ChatWithAIScreenState extends State<ChatWithAIScreen> {
                   IconButton(
                     icon: const Icon(Icons.send, color: Colors.white),
                     onPressed: () {
-                      if (messageController.text.trim().isNotEmpty) {
-                        setState(() {
-                          messages.add({
-                            'sender': 'user',
-                            'message': messageController.text.trim(),
-                          });
-                          messages.add({
-                            'sender': 'ai',
-                            'message':
-                            'AI Response for "${messageController.text.trim()}"',
-                          });
-                        });
-                        messageController.clear();
+                      final userMessage = _controller.text.trim();
+                      if (userMessage.isNotEmpty) {
+                        _controller.clear();
+                        _sendMessage(userMessage);
                       }
                     },
                   ),
@@ -183,7 +244,6 @@ class ChatBubble extends StatelessWidget {
         child: Stack(
           clipBehavior: Clip.none,
           children: [
-            // Main Chat Bubble
             Container(
               padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
               decoration: BoxDecoration(
@@ -194,8 +254,7 @@ class ChatBubble extends StatelessWidget {
                   topLeft: const Radius.circular(16),
                   topRight: const Radius.circular(16),
                   bottomLeft: isUser ? const Radius.circular(16) : Radius.zero,
-                  bottomRight:
-                  isUser ? Radius.zero : const Radius.circular(16),
+                  bottomRight: isUser ? Radius.zero : const Radius.circular(16),
                 ),
                 boxShadow: [
                   BoxShadow(
@@ -215,7 +274,6 @@ class ChatBubble extends StatelessWidget {
                 ),
               ),
             ),
-            // Tail
             Positioned(
               bottom: -6,
               left: isUser ? null : 4,
@@ -232,7 +290,6 @@ class ChatBubble extends StatelessWidget {
   }
 }
 
-// Tail Painter for Chat Bubble
 class ChatBubbleTailPainter extends CustomPainter {
   final bool isUser;
 
@@ -246,12 +303,10 @@ class ChatBubbleTailPainter extends CustomPainter {
 
     final path = Path();
     if (isUser) {
-      // Tail pointing to the right (User)
       path.moveTo(0, 0);
       path.lineTo(size.width, size.height / 2);
       path.lineTo(0, size.height);
     } else {
-      // Tail pointing to the left (AI)
       path.moveTo(size.width, 0);
       path.lineTo(0, size.height / 2);
       path.lineTo(size.width, size.height);
