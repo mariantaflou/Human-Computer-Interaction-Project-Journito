@@ -35,7 +35,7 @@ class MyApp extends StatelessWidget {
         '/tasks': (context) => const TasksScreen(),
         '/calendar': (context) => const CalendarScreen(),
         //'/journaling': (context) => const JournalingScreen(),
-        '/journaling': (context) => JournalingScreen(selectedDate: DateTime.now()),
+        '/journaling': (context) => const JournalingScreen(),
         '/experiences': (context) => const ExperiencesScreen(),
         '/information': (context) => const InformationScreen(),
       },
