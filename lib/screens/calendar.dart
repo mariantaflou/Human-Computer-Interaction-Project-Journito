@@ -1,40 +1,74 @@
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:table_calendar/table_calendar.dart';
 import '../widgets/ai_button.dart';
 
 class CalendarScreen extends StatefulWidget {
-  const CalendarScreen({super.key});
+  const CalendarScreen({Key? key}) : super(key: key);
 
   @override
-  State<CalendarScreen> createState() => _CalendarScreenState();
+  _CalendarScreenState createState() => _CalendarScreenState();
 }
 
 class _CalendarScreenState extends State<CalendarScreen> {
   final CalendarFormat _calendarFormat = CalendarFormat.month;
   DateTime _focusedDay = DateTime(DateTime.now().year, DateTime.now().month, 1);
   DateTime? _selectedDay;
+  List<String> _loggedDates = [];
+  int _currentStreak = 0;
 
-  // Mock data for days with logs and tasks (you'll replace this with actual data)
-  final Set<DateTime> _daysWithLogs = {
-    DateTime(2024, 12, 5),
-    DateTime(2024, 12, 6),
-    DateTime(2024, 12, 7),
-    DateTime(2024, 12, 8),
-    DateTime(2024, 12, 9),
-    DateTime(2024, 12, 10),
-    DateTime(2024, 12, 11),
-  };
+  @override
+  void initState() {
+    super.initState();
+    _loadLoggedDates();
+  }
 
-  final Set<DateTime> _daysWithTasks = {
-    DateTime(2024, 12, 7),
-    DateTime(2024, 12, 12),
-    DateTime(2024, 12, 18),
-    DateTime(2024, 12, 15),
-  };
+  Future<void> _loadLoggedDates() async {
+    final prefs = await SharedPreferences.getInstance();
+    setState(() {
+      _loggedDates = prefs.getStringList('logs') ?? [];
+      _calculateStreak();
+    });
+  }
 
-  // Helper function to compare only year, month, and day
-  bool _isSameDay(DateTime day1, DateTime day2) {
-    return day1.year == day2.year && day1.month == day2.month && day1.day == day2.day;
+  void _calculateStreak() {
+    if (_loggedDates.isEmpty) {
+      _currentStreak = 0;
+      return;
+    }
+
+    // Convert string dates to DateTime objects and sort them
+    List<DateTime> dates = _loggedDates
+        .map((dateStr) => DateTime.parse(dateStr))
+        .toList()
+      ..sort((a, b) => b.compareTo(a)); // Sort in descending order
+
+    DateTime today = DateTime.now();
+    today = DateTime(today.year, today.month, today.day);
+
+    int streak = 0;
+    DateTime currentDate = today;
+
+    // Start counting streak from today or most recent logged date
+    for (var i = 0; i <= dates.length; i++) {
+      String currentDateStr =
+          '${currentDate.year}-${currentDate.month.toString().padLeft(2, '0')}-${currentDate.day.toString().padLeft(2, '0')}';
+
+      if (_loggedDates.contains(currentDateStr)) {
+        streak++;
+        currentDate = currentDate.subtract(const Duration(days: 1));
+      } else {
+        break;
+      }
+    }
+
+    _currentStreak = streak;
+  }
+
+  bool _isLogged(DateTime date) {
+    final dateString =
+        '${date.year}-${date.month.toString().padLeft(2, '0')}-${date.day.toString().padLeft(2, '0')}';
+    return _loggedDates.contains(dateString);
   }
 
   @override
@@ -69,82 +103,71 @@ class _CalendarScreenState extends State<CalendarScreen> {
                 ),
                 child: Column(
                   children: [
-                    Expanded(
-                      child: TableCalendar(
-                        firstDay: DateTime.utc(2022, 1, 1),
-                        lastDay: DateTime.utc(2025, 12, 31),
-                        focusedDay: _focusedDay,
-                        calendarFormat: _calendarFormat,
-                        headerStyle: const HeaderStyle(
-                          formatButtonVisible: false,
-                          titleCentered: true,
-                          titleTextStyle: TextStyle(
-                            color: Colors.white,
-                            fontSize: 20,
-                            fontWeight: FontWeight.bold,
-                          ),
-                          leftChevronIcon: Icon(Icons.chevron_left, color: Colors.white),
-                          rightChevronIcon: Icon(Icons.chevron_right, color: Colors.white),
+                    TableCalendar(
+                      firstDay: DateTime.utc(2022, 1, 1),
+                      lastDay: DateTime.utc(2025, 12, 31),
+                      focusedDay: _focusedDay,
+                      calendarFormat: _calendarFormat,
+                      selectedDayPredicate: (day) => isSameDay(_selectedDay, day),
+                      onDaySelected: (selectedDay, focusedDay) {
+                        setState(() {
+                          _selectedDay = selectedDay;
+                          _focusedDay = focusedDay;
+                        });
+                        Navigator.pushNamed(
+                          context,
+                          '/journaling',
+                          arguments: {'selectedDate': selectedDay},
+                        ).then((_) {
+                          _loadLoggedDates(); // Reload dates when returning
+                        });
+                      },
+                      headerStyle: const HeaderStyle(
+                        formatButtonVisible: false,
+                        titleCentered: true,
+                        titleTextStyle: TextStyle(
+                          color: Colors.white,
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold,
                         ),
-
-                        daysOfWeekStyle: const DaysOfWeekStyle(
-                          weekdayStyle: TextStyle(color: Colors.white), // Change weekday color
-                          weekendStyle: TextStyle(color: Colors.grey), // Change weekend color
+                        leftChevronIcon: Icon(Icons.chevron_left, color: Colors.white),
+                        rightChevronIcon: Icon(Icons.chevron_right, color: Colors.white),
+                      ),
+                      daysOfWeekStyle: const DaysOfWeekStyle(
+                        weekdayStyle: TextStyle(color: Colors.white),
+                        weekendStyle: TextStyle(color: Colors.grey),
+                      ),
+                      calendarStyle: const CalendarStyle(
+                        todayDecoration: BoxDecoration(
+                          color: Color(0xff1f3f42),
+                          shape: BoxShape.circle,
                         ),
-
-                        selectedDayPredicate: (day) {
-                          return isSameDay(_selectedDay, day);
+                        selectedDecoration: BoxDecoration(
+                          color: Color(0xff627E87),
+                          shape: BoxShape.circle,
+                        ),
+                        defaultTextStyle: TextStyle(color: Colors.white),
+                        weekendTextStyle: TextStyle(color: Colors.white),
+                        outsideDaysVisible: false,
+                      ),
+                      calendarBuilders: CalendarBuilders(
+                        markerBuilder: (context, day, events) {
+                          if (_isLogged(day)) {
+                            return _buildMarker(const Color(0xff1f3f42));
+                          }
+                          return null;
                         },
-                        onDaySelected: (selectedDay, focusedDay) {
-                          setState(() {
-                            _selectedDay = selectedDay;
-                            _focusedDay = focusedDay;
-                          });
-                        },
-                        onPageChanged: (focusedDay) {
-                          setState(() {
-                            _focusedDay = focusedDay;
-                          });
-                        },
-                        calendarStyle: const CalendarStyle(
-                          todayDecoration: BoxDecoration(
-                            color: Color(0xff1f3f42),
-                            shape: BoxShape.circle,
-                          ),
-                          selectedDecoration: BoxDecoration(
-                            color: Color(0xff627E87),
-                            shape: BoxShape.circle,
-                          ),
-                          defaultTextStyle: TextStyle(color: Colors.white),
-                          weekendTextStyle: TextStyle(color: Colors.white),
-                          outsideDaysVisible: false,
-                        ),
-                        calendarBuilders: CalendarBuilders(
-                          markerBuilder: (context, day, events) {
-                            bool hasLog = _daysWithLogs.any((d) => _isSameDay(d, day));
-                            bool hasTask = _daysWithTasks.any((d) => _isSameDay(d, day));
-
-                            //if (hasLog && hasTask) {
-                            //return _buildMarker(Color());
-                            //} else if (hasLog) {
-                            if (hasLog) {
-                              return _buildMarker(const Color(0xff1f3f42));
-                            } else if (hasTask) {
-                              return _buildMarker(const Color(0xFFC09B80));
-                            }
-                            return null;
-                          },
-                        ),
                       ),
                     ),
+                    const SizedBox(height: 16),
                     _buildLogsAndStreaksSection(),
+                    const SizedBox(height: 20), // Adjust height to move buttons higher
                     _buildBottomButtons(context),
                     const SizedBox(height: 16),
                   ],
                 ),
               ),
             ),
-            // AI Button
             buildAIButton(context),
           ],
         ),
@@ -206,7 +229,7 @@ class _CalendarScreenState extends State<CalendarScreen> {
 
   Widget _buildLogsAndStreaksSection() {
     return Padding(
-      padding: const EdgeInsets.all(16),
+      padding: const EdgeInsets.symmetric(horizontal: 16),
       child: Container(
         width: double.infinity,
         padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 24),
@@ -221,19 +244,19 @@ class _CalendarScreenState extends State<CalendarScreen> {
             ),
           ],
         ),
-        child: const Column(
+        child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text(
+                const Text(
                   'Streak',
                   style: TextStyle(color: Colors.white, fontSize: 16),
                 ),
                 Text(
-                  '7',
-                  style: TextStyle(
+                  _currentStreak.toString(),
+                  style: const TextStyle(
                     color: Colors.white,
                     fontSize: 24,
                     fontWeight: FontWeight.bold,
@@ -241,17 +264,17 @@ class _CalendarScreenState extends State<CalendarScreen> {
                 ),
               ],
             ),
-            SizedBox(height: 8),
+            const SizedBox(height: 8),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text(
+                const Text(
                   'Logs',
                   style: TextStyle(color: Colors.white, fontSize: 16),
                 ),
                 Text(
-                  '11',
-                  style: TextStyle(
+                  _loggedDates.length.toString(),
+                  style: const TextStyle(
                     color: Colors.white,
                     fontSize: 24,
                     fontWeight: FontWeight.bold,
@@ -277,10 +300,12 @@ class _CalendarScreenState extends State<CalendarScreen> {
 
   Widget _buildButton(BuildContext context, String title, IconData icon, String route) {
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 6.0, horizontal: 24.0),
+      padding: const EdgeInsets.symmetric(vertical: 4.0, horizontal: 24.0),
       child: ElevatedButton.icon(
         onPressed: () {
-          Navigator.pushNamed(context, route);
+          Navigator.pushNamed(context, route).then((_) {
+            _loadLoggedDates(); // Reload dates when returning from any screen
+          });
         },
         icon: Icon(icon, color: const Color(0xff1f3f42)),
         label: Text(
