@@ -5,9 +5,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../widgets/ai_button.dart';
 
 class JournalingScreen extends StatefulWidget {
-  final DateTime selectedDate;
-
-  const JournalingScreen({Key? key, required this.selectedDate}) : super(key: key);
+  const JournalingScreen({Key? key}) : super(key: key);
 
   @override
   _JournalingScreenState createState() => _JournalingScreenState();
@@ -16,6 +14,7 @@ class JournalingScreen extends StatefulWidget {
 class _JournalingScreenState extends State<JournalingScreen> {
   final TextEditingController _textController = TextEditingController();
   File? _attachedImage;
+  DateTime _currentDate = DateTime.now(); // Initialize with today's date
 
   @override
   void initState() {
@@ -23,22 +22,42 @@ class _JournalingScreenState extends State<JournalingScreen> {
     _loadJournalEntry();
   }
 
+  // Load journal entry for the current date
   Future<void> _loadJournalEntry() async {
     final prefs = await SharedPreferences.getInstance();
     final key = _formattedDate();
     final savedContent = prefs.getString(key) ?? '';
-    _textController.text = savedContent;
+    setState(() {
+      _textController.text = savedContent;
+    });
   }
 
+  // Save the journal entry
   Future<void> _saveJournal() async {
     final prefs = await SharedPreferences.getInstance();
     final key = _formattedDate();
     await prefs.setString(key, _textController.text);
   }
 
+  // Format the date as a string key
   String _formattedDate() {
-    final now = widget.selectedDate;
-    return '${now.year}-${now.month.toString().padLeft(2, '0')}-${now.day.toString().padLeft(2, '0')}';
+    return '${_currentDate.year}-${_currentDate.month.toString().padLeft(2, '0')}-${_currentDate.day.toString().padLeft(2, '0')}';
+  }
+
+  // Navigate to the previous date
+  void _navigateToPreviousDate() {
+    setState(() {
+      _currentDate = _currentDate.subtract(const Duration(days: 1));
+      _loadJournalEntry();
+    });
+  }
+
+  // Navigate to the next date
+  void _navigateToNextDate() {
+    setState(() {
+      _currentDate = _currentDate.add(const Duration(days: 1));
+      _loadJournalEntry();
+    });
   }
 
   @override
@@ -63,6 +82,8 @@ class _JournalingScreenState extends State<JournalingScreen> {
             _buildTitle(context),
             const SizedBox(height: 20),
             _buildDateSection(context),
+            const SizedBox(height: 20),
+            _buildButtonRow(context),
             const SizedBox(height: 20),
             _buildJournalingFrame(context),
             _buildBottomButtonRow(context),
@@ -94,13 +115,47 @@ class _JournalingScreenState extends State<JournalingScreen> {
   }
 
   Widget _buildDateSection(BuildContext context) {
-    return Text(
-      _formattedDate(),
-      style: const TextStyle(
-        color: Colors.white,
-        fontSize: 20,
-        fontWeight: FontWeight.bold,
-      ),
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        IconButton(
+          onPressed: _navigateToPreviousDate,
+          icon: const Icon(
+            Icons.arrow_back_ios_new,
+            color: Colors.white,
+          ),
+        ),
+        GestureDetector(
+          onTap: () {
+            Navigator.pushNamed(context, '/calendar');
+          },
+          child: Text(
+            '${_dayOfWeek(_currentDate.weekday)}, ${_currentDate.day} ${_monthOfYear(_currentDate.month)} ${_currentDate.year}',
+            style: const TextStyle(
+              color: Colors.white,
+              fontSize: 20,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+        ),
+        IconButton(
+          onPressed: _navigateToNextDate,
+          icon: const Icon(
+            Icons.arrow_forward_ios,
+            color: Colors.white,
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildButtonRow(BuildContext context) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+      children: [
+        _buildButton(context, 'Find Experiences', '/experiences'),
+        _buildButton(context, "Today's Tasks", '/tasks'),
+      ],
     );
   }
 
@@ -134,6 +189,21 @@ class _JournalingScreenState extends State<JournalingScreen> {
                     border: InputBorder.none,
                   ),
                   style: const TextStyle(color: Colors.white),
+                ),
+              ),
+              if (_attachedImage != null)
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Image.file(
+                    _attachedImage!,
+                    fit: BoxFit.contain,
+                  ),
+                ),
+              IconButton(
+                onPressed: _attachPicture,
+                icon: const Icon(
+                  Icons.attach_file,
+                  color: Colors.white,
                 ),
               ),
             ],
@@ -171,5 +241,50 @@ class _JournalingScreenState extends State<JournalingScreen> {
         ],
       ),
     );
+  }
+
+  Widget _buildButton(BuildContext context, String title, String route) {
+    return ElevatedButton(
+      onPressed: () {
+        Navigator.pushNamed(context, route);
+      },
+      style: ElevatedButton.styleFrom(
+        backgroundColor: const Color(0xffc9a77a),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(25),
+        ),
+        minimumSize: const Size(140, 48),
+      ),
+      child: Text(
+        title,
+        style: const TextStyle(
+          color: Colors.white,
+          fontSize: 16,
+        ),
+      ),
+    );
+  }
+
+  String _dayOfWeek(int day) {
+    const days = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
+    return days[day - 1];
+  }
+
+  String _monthOfYear(int month) {
+    const months = [
+      'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
+      'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'
+    ];
+    return months[month - 1];
+  }
+
+  Future<void> _attachPicture() async {
+    final picker = ImagePicker();
+    final pickedImage = await picker.pickImage(source: ImageSource.gallery);
+    if (pickedImage != null) {
+      setState(() {
+        _attachedImage = File(pickedImage.path);
+      });
+    }
   }
 }
