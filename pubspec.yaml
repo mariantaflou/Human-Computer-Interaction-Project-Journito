@@ -11,9 +11,11 @@ dependencies:
   flutter:
     sdk: flutter
   shared_preferences: ^2.0.18
+  http: ^1.1.0
   cupertino_icons: ^1.0.8
   table_calendar: ^3.1.3
   image_picker: ^1.1.2
+  flutter_dotenv: ^5.1.0
 
 dev_dependencies:
   flutter_test:
@@ -27,3 +29,4 @@ flutter:
     - assets/images/Shape.png
     - assets/images/icon.png
     - .env
+
