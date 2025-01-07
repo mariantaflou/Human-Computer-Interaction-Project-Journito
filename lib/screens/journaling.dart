@@ -13,7 +13,7 @@ class JournalingScreen extends StatefulWidget {
 
 class _JournalingScreenState extends State<JournalingScreen> {
   final TextEditingController _textController = TextEditingController();
-  File? _attachedImage;
+  List<File> _attachedImages = [];
   DateTime _currentDate = DateTime.now(); // Initialize with today's date
 
   @override
@@ -26,9 +26,12 @@ class _JournalingScreenState extends State<JournalingScreen> {
   Future<void> _loadJournalEntry() async {
     final prefs = await SharedPreferences.getInstance();
     final key = _formattedDate();
-    final savedContent = prefs.getString(key) ?? '';
+    final savedContent = prefs.getString('${key}_text') ?? '';
+    final savedImages = prefs.getStringList('${key}_images') ?? [];
+
     setState(() {
       _textController.text = savedContent;
+      _attachedImages = savedImages.map((path) => File(path)).toList();
     });
   }
 
@@ -36,7 +39,10 @@ class _JournalingScreenState extends State<JournalingScreen> {
   Future<void> _saveJournal() async {
     final prefs = await SharedPreferences.getInstance();
     final key = _formattedDate();
-    await prefs.setString(key, _textController.text);
+    await prefs.setString('${key}_text', _textController.text);
+
+    final imagePaths = _attachedImages.map((image) => image.path).toList();
+    await prefs.setStringList('${key}_images', imagePaths);
   }
 
   // Format the date as a string key
@@ -63,6 +69,7 @@ class _JournalingScreenState extends State<JournalingScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: true, // Prevent keyboard overlap
       body: Container(
         decoration: const BoxDecoration(
           gradient: LinearGradient(
@@ -175,38 +182,61 @@ class _JournalingScreenState extends State<JournalingScreen> {
               ),
             ],
           ),
-          child: Column(
-            children: [
-              Expanded(
-                child: TextField(
-                  controller: _textController,
-                  maxLines: null,
-                  textInputAction: TextInputAction.newline,
-                  decoration: const InputDecoration(
-                    contentPadding: EdgeInsets.all(16),
-                    hintText: 'Write your thoughts...',
-                    hintStyle: TextStyle(color: Colors.white70),
-                    border: InputBorder.none,
-                  ),
-                  style: const TextStyle(color: Colors.white),
-                ),
-              ),
-              if (_attachedImage != null)
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Image.file(
-                    _attachedImage!,
-                    fit: BoxFit.contain,
+          child: SingleChildScrollView(
+            child: Column(
+              children: [
+                // Text input area
+                Container(
+                  constraints: const BoxConstraints(minHeight: 200),
+                  child: TextField(
+                    controller: _textController,
+                    maxLines: null,
+                    textInputAction: TextInputAction.newline,
+                    decoration: const InputDecoration(
+                      contentPadding: EdgeInsets.all(16),
+                      hintText: 'Write your thoughts...',
+                      hintStyle: TextStyle(color: Colors.white70),
+                      border: InputBorder.none,
+                    ),
+                    style: const TextStyle(color: Colors.white),
                   ),
                 ),
-              IconButton(
-                onPressed: _attachPicture,
-                icon: const Icon(
-                  Icons.attach_file,
-                  color: Colors.white,
+                // Image gallery area
+                if (_attachedImages.isNotEmpty)
+                  Container(
+                    height: 150, // Fixed height for image gallery
+                    margin: const EdgeInsets.symmetric(vertical: 8),
+                    child: ListView.builder(
+                      scrollDirection: Axis.horizontal,
+                      itemCount: _attachedImages.length,
+                      itemBuilder: (context, index) {
+                        return Container(
+                          margin: const EdgeInsets.symmetric(horizontal: 8),
+                          width: 150, // Fixed width for each image
+                          child: ClipRRect(
+                            borderRadius: BorderRadius.circular(10),
+                            child: Image.file(
+                              _attachedImages[index],
+                              fit: BoxFit.cover,
+                            ),
+                          ),
+                        );
+                      },
+                    ),
+                  ),
+                // Attach button
+                Align(
+                  alignment: Alignment.centerRight,
+                  child: IconButton(
+                    onPressed: _attachPicture,
+                    icon: const Icon(
+                      Icons.attach_file,
+                      color: Colors.white,
+                    ),
+                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),
@@ -283,8 +313,9 @@ class _JournalingScreenState extends State<JournalingScreen> {
     final pickedImage = await picker.pickImage(source: ImageSource.gallery);
     if (pickedImage != null) {
       setState(() {
-        _attachedImage = File(pickedImage.path);
+        _attachedImages.add(File(pickedImage.path));
       });
     }
   }
 }
+
