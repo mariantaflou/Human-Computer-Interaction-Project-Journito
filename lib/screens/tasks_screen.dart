@@ -26,7 +26,11 @@ class _TasksScreenState extends State<TasksScreen> {
       final List<dynamic> taskList = jsonDecode(tasksJson);
       setState(() {
         tasks.clear();
-        tasks.addAll(taskList.map((json) => Task.fromJson(json)));
+        tasks.addAll(taskList.map((json){
+          final task = Task.fromJson(json);
+          task.isExpanded = false; // Force isExpanded to be false
+          return task;
+        }));
       });
     }
   }
@@ -114,14 +118,14 @@ class _TasksScreenState extends State<TasksScreen> {
             ),
             const SizedBox(height: 50),
             Expanded(
-              child: Container(
-                decoration: const BoxDecoration(
-                  color: Color(0xff52717B),
-                  borderRadius: BorderRadius.only(
-                    topLeft: Radius.circular(45),
-                    topRight: Radius.circular(45),
-                  ),
-                ),
+              //child: Container(
+               // decoration: const BoxDecoration(
+                 // color: Color(0xff52717B),
+                  //borderRadius: BorderRadius.only(
+                   // topLeft: Radius.circular(45),
+                    //topRight: Radius.circular(45),
+                  //),
+                //),
                 child: Column(
                   children: [
                     const Padding(
@@ -185,7 +189,7 @@ class _TasksScreenState extends State<TasksScreen> {
                   ],
                 ),
               ),
-            ),
+            //),
           ],
         ),
       ),
@@ -281,7 +285,7 @@ class _TaskWidgetState extends State<TaskWidget> {
       margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
       padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 20),
       decoration: BoxDecoration(
-        color: const Color(0xffc9a77a),
+        color: const Color(0xff6A838B),
         borderRadius: BorderRadius.circular(30),
       ),
       child: Column(
@@ -326,7 +330,21 @@ class _TaskWidgetState extends State<TaskWidget> {
               children: [
                 ElevatedButton(
                   onPressed: _saveTask,
-                  child: const Text('Save'),
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: const Color(0xffc9a77a),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(25),
+                    ),
+                    minimumSize: const Size(100, 40),
+                  ),
+                  child: const Text(
+                    'Save',
+                    style: TextStyle(
+                      color: Color(0xff1f3f42),  // Dark teal color
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
                 ),
                 IconButton(
                   icon: const Icon(Icons.delete, color: Colors.white),
@@ -364,5 +382,3 @@ class _TaskWidgetState extends State<TaskWidget> {
     );
   }
 }
-
-

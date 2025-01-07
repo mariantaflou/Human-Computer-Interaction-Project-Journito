@@ -28,8 +28,10 @@ class PreferencesScreen extends StatelessWidget {
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
             colors: [
-              Color(0xff335e5b),
-              Color(0xff4d7572),
+              Color(0xff1f3f42),
+              Color(0xff2d4d4e),
+              Color(0xff52717B),
+              Color(0xff52717B),
             ],
           ),
         ),
@@ -46,16 +48,19 @@ class PreferencesScreen extends StatelessWidget {
                 color: Color(0xFFC09B80),
               ),
             ),
-            const SizedBox(height: 20),
+            const SizedBox(height: 50),
             // Preferences List
             Expanded(
               child: Container(
-                decoration: BoxDecoration(
-                  color: const Color(0xff4C7471), // Greenish background
-                  borderRadius: BorderRadius.circular(30),
+                decoration: const BoxDecoration(
+                  color: Color(0xff52717B), // Greenish background
+                  borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(30),
+                    topRight: Radius.circular(30),
+                  ),
                 ),
-                margin: const EdgeInsets.symmetric(horizontal: 16),
-                padding: const EdgeInsets.all(16),
+                //margin: const EdgeInsets.symmetric(horizontal: 16),
+                padding: const EdgeInsets.all(20),
                 child: ListView.builder(
                   itemCount: preferences.length,
                   itemBuilder: (context, index) {
@@ -81,7 +86,7 @@ class PreferencesScreen extends StatelessWidget {
                   child: const Icon(
                     Icons.check,
                     size: 30,
-                    color: Colors.white,
+                    color: Color(0xff2d4d4e),
                   ),
                 ),
               ),
