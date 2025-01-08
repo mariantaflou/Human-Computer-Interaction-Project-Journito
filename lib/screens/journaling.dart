@@ -45,32 +45,65 @@ class _JournalingScreenState extends State<JournalingScreen> {
       _textController.text = savedContent;
       _attachedImages = savedImages.map((path) => File(path)).toList();
     });
+    await _cleanupEmptyJournal();
   }
 
   Future<void> _saveJournal() async {
-    // Only save if there's actual content
-    if (_textController.text.trim().isEmpty && _attachedImages.isEmpty) {
-      Navigator.pop(context);
-      return;
-    }
-
     final prefs = await SharedPreferences.getInstance();
     final key = _formattedDate();
 
-    await prefs.setString('${key}_text', _textController.text);
+    // Check if content is empty
+    bool hasContent = _textController.text.trim().isNotEmpty || _attachedImages.isNotEmpty;
 
-    final imagePaths = _attachedImages.map((image) => image.path).toList();
-    await prefs.setStringList('${key}_images', imagePaths);
-
+    // Get current logged dates
     List<String> loggedDates = prefs.getStringList('logs') ?? [];
-    if (!loggedDates.contains(key)) {
-      loggedDates.add(key);
-      await prefs.setStringList('logs', loggedDates);
+
+    if (hasContent) {
+      // Save the content
+      await prefs.setString('${key}_text', _textController.text);
+
+      final imagePaths = _attachedImages.map((image) => image.path).toList();
+      await prefs.setStringList('${key}_images', imagePaths);
+
+      // Add date to logs if not already present
+      if (!loggedDates.contains(key)) {
+        loggedDates.add(key);
+        await prefs.setStringList('logs', loggedDates);
+      }
+    } else {
+      // Content is empty, remove all traces of the journal entry
+      await prefs.remove('${key}_text');
+      await prefs.remove('${key}_images');
+
+      // Remove date from logs if present
+      if (loggedDates.contains(key)) {
+        loggedDates.remove(key);
+        await prefs.setStringList('logs', loggedDates);
+      }
     }
 
     Navigator.pop(context);
   }
 
+  Future<void> _cleanupEmptyJournal() async {
+    final prefs = await SharedPreferences.getInstance();
+    final key = _formattedDate();
+
+    // Get text and images for current date
+    final savedText = prefs.getString('${key}_text') ?? '';
+    final savedImages = prefs.getStringList('${key}_images') ?? [];
+
+    // If both are empty, remove the date from logs
+    if (savedText.trim().isEmpty && savedImages.isEmpty) {
+      List<String> loggedDates = prefs.getStringList('logs') ?? [];
+      if (loggedDates.contains(key)) {
+        loggedDates.remove(key);
+        await prefs.setStringList('logs', loggedDates);
+        await prefs.remove('${key}_text');
+        await prefs.remove('${key}_images');
+      }
+    }
+  }
 
   String _formattedDate() {
     return '${_currentDate.year}-${_currentDate.month.toString().padLeft(2, '0')}-${_currentDate.day.toString().padLeft(2, '0')}';
@@ -339,3 +372,4 @@ class _JournalingScreenState extends State<JournalingScreen> {
     }
   }
 }
+
