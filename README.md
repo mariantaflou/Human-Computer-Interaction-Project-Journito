@@ -85,14 +85,14 @@ flutter run
 
 **Access the App**
 
-Once the app is running, you can interact with it and test its features. Since Jurnito is a demo app, you can log in using the default user and password credentials.
+Once the app is running, you can interact with it and test its features. Since Jurnito is a demo app, you can log in using the default username and password credentials.
 
 
 ## Usage   Add more info (ernest)
 Jurnito is currently in its demo phase, offering a glimpse of its exciting features. Follow these steps to explore the app:
 **Getting Started**
 Log in using the following credentials:<br>
-* Username: username<br>
+* Username: user<br>
 * Password: password<br>
 
 **How to use Journaling**
