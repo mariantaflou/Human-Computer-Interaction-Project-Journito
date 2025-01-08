@@ -39,40 +39,83 @@ Table of Contents:
 
 
 ## Installation not fixed(ernest)
-1.Clone the repository:
-Copy code git clone https://github.com/mariantaflou/journito.git
-2.Navigate to the project directory:
-cd journito
-3.Install dependencies:
+Follow the steps below to set up and run Jurnito on your local machine. This guide assumes you have basic knowledge of software installation and system dependencies.
+
+Prerequisites
+Before installing, ensure you have the following software installed on your machine:
+
+Flutter SDK: Flutter is the framework used to build the app.
+Android Studio: An IDE used to run the app’s simulation.
+Dart SDK: Dart is the programming language used in Flutter apps.
+Git: For cloning the repository.
+
+After installing Flutter, make sure it's added to your system’s PATH variable. To check if Flutter is correctly installed, run this command:
+```bash
+flutter doctor
+```
+
+```bash
+git clone https://github.com/your-username/jurnito.git
+```
+
+```bash
 flutter pub get
-4.Run the app:
+```
+
+```bash
 flutter run
+```
 
 
 ## Usage   Add more info (ernest)
-1.Launch the app.<br>
-2.Log in using **username** as username and **password** as password.<br>
-3.Use the calendar to view or create tasks.<br>
-4.Attach images to your tasks for better context.<br>
-5.Logout or close the app—your data is saved automatically.<br>
+Jurnito is currently in its demo phase, offering a glimpse of its exciting features. Follow these steps to explore the app:
+**Getting Started**
+Log in using the following credentials:<br>
+* Username: username<br>
+* Password: password<br>
+
+**How to use Journaling**
+* Add journal entries to reflect on your day.<br>
+* Attach photos to create memorable visual logs.<br>
+
+**How to use Task Management**
+* Add tasks and set priorities.<br>
+* Mark tasks as complete to track your progress.<br>
+
+**How to useAI Chat**
+* Engage with the AI chat for brainstorming ideas or seeking inspiration.<br>
+* Use natural language to interact effortlessly.<br>
+
+**AI Experiences**
+* Discover tailored suggestions for activities and hobbies.<br>
+* Browse detailed descriptions of new experiences.<br>
+
+**How to use Motivational Calendar**
+* Track journaling streaks and task completion history.<br>
+
+With Jurnito, transforming your daily routines into meaningful and fulfilling<br>
+experiences has never been easier. Start exploring today! 😊
 
 
 
 ## Dependencies
-The project uses the following packages:<br>
-•Flutter SDK: ^3.5.4<br>
-•shared_preferences: ^2.0.18 (local data persistence)<br>
-•table_calendar: ^3.1.3 (calendar integration)<br>
-•image_picker: ^1.1.2 (photo picker)<br>
-•cupertino_icons: ^1.0.8 (iOS icons)<br>
+The project uses the following packages:
+* Flutter SDK: ^3.5.4
+* shared_preferences: ^2.0.18 (local data persistence)
+* table_calendar: ^3.1.3 (calendar integration)
+* image_picker: ^1.1.2 (photo picker)
+* cupertino_icons: ^1.0.8 (iOS icons)
 
 
 
 ## Architecture
-Journito follows a clean architecture pattern:<br>
-•UI Layer: Handles visual representation and user interaction.<br>
-•Data Layer: Manages persistence with shared_preferences and any future<br> integration with a remote database.<br>
-•State Management: Stateless widgets combined with controllers for simplicity.<br>
+* The architecture of Jurnito is designed to ensure scalability, flexibility, and a seamless user experience. The app combines a user-friendly front-end, robust back-end, and AI-driven features to create a comprehensive platform for journaling, task management, and personal growth. This modular design allows easy maintenance and future expansion.
+
+* The design of the application is strongly influenced by established design patterns, which ensure a consistent, intuitive user experience and high-quality code structure. These design patterns dictate how the user interface elements are laid out and how components interact with each other, contributing to the overall architectural integrity of the app.
+
+* To explore the visual representation of these patterns, including layouts, component designs, and interaction flows, refer to the complete design in the Figma file:https://www.figma.com/design/0uJwM5Snv9WTdAGLB65ngM/HCI-2024?node-id=23-68&t=SxadUrtq1NwYEEvf-1
+
+
 
 
 ## Screenshots add screens (ernest)
