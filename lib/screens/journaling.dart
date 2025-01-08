@@ -306,7 +306,7 @@ class _JournalingScreenState extends State<JournalingScreen> {
           ElevatedButton.icon(
             onPressed: () async {
               await _saveJournal();
-              Navigator.pop(context);
+              Navigator.pushNamed(context, '/calendar');
             },
             icon: const Icon(Icons.check, color: Color(0xff1f3f42)),
             label: const Text(
