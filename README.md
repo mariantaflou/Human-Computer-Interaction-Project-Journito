@@ -104,22 +104,23 @@ Log in using the following credentials:<br>
 
 **How to use Task Management**
 * On the main or journaling screen by tapping to **My tasks** you can see a preview of all your taks.
-* Tapping on **(+)** button you can add a task allowing you to set title,priority ,location ,date.
+* Tapping on **(+)** button you can add a task allowing you to set title, date, location, notes.
 * Tap on **save** button and your task is ready. So simple!!!
-* You can mark tasks as complete to track your progress.
 
 **How to use AI Chat**
 * Every screen contains AI chat button to interact effortlessly.
-* Tap it and AI chat will resolve all your queries.
+* Tap it and AI chat will give you ideas and help you with day to day tasks.
 
 **How to use Experiences**
-* By tapping on **Find experiencies** you can see recommended experiencies made by AI.
+* By tapping on **Find experiencies** you can see personalized experiencies recommended by AI.
 * All the experiencies include detailed descriptions you can read and follow.
 
 **How to use Motivational Calendar**
-* Motivational calendar can be accessed through main and journaling screen.
+* Motivational calendar can be accessed through main and journaling screen by tapping on the date.
 * When accessing to it you have options like (add a log ,new task ,find experiences).
-* Choose a date to add a log.Thats it!!
+* You can see on which dates you have added logs and when you have uppcomming or past tasks.
+* See how many logs you have made and make sure not
+* Choose a date and add a log or a task.Thats it!!
 
 
 With Journito, transforming your daily routines into meaningful and fulfilling
