@@ -38,33 +38,54 @@ Table of Contents:
 
 
 
-## Installation not fixed(ernest)
+## Installation 
 Follow the steps below to set up and run Jurnito on your local machine. This guide assumes you have basic knowledge of software installation and system dependencies.
 
 Prerequisites
 Before installing, ensure you have the following software installed on your machine:
 
-Flutter SDK: Flutter is the framework used to build the app.
-Android Studio: An IDE used to run the app’s simulation.
-Dart SDK: Dart is the programming language used in Flutter apps.
-Git: For cloning the repository.
+* Flutter SDK: Flutter is the framework used to build the app.
+* Android Studio: An IDE used to run the app’s simulation.
+* Dart SDK: Dart is the programming language used in Flutter apps.
+* Git: For cloning the repository.
 
 After installing Flutter, make sure it's added to your system’s PATH variable. To check if Flutter is correctly installed, run this command:
 ```bash
 flutter doctor
 ```
-
+**Steps to Install**
+* Clone the Repository
+First, clone the Jurnito repository to your local machine using Git:
 ```bash
-git clone https://github.com/your-username/jurnito.git
+git clone https://github.com/mariantaflou/journito.git
 ```
 
+**Navigate to the Project Directory**
+* Change your directory to the project folder:
+```bash
+cd journito
+```
+**Install Dependencies**
+* Install the required dependencies using Flutter:
 ```bash
 flutter pub get
 ```
 
+**Open the Project in Android Studio**
+* Open Android Studio, then click on "Open" and select the Jurnito project folder.
+
+**Run the App**
+
+After opening the project, you can run the app on an Android emulator or connected physical device:
+* Click the green play button in Android Studio, or
+* Use the command line to run the app:
 ```bash
 flutter run
 ```
+
+**Access the App**
+
+Once the app is running, you can interact with it and test its features. Since Jurnito is a demo app, you can log in using the default username and password credentials.
 
 
 ## Usage   Add more info (ernest)
