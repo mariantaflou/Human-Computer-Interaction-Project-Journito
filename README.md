@@ -119,8 +119,8 @@ Log in using the following credentials:<br>
 * Motivational calendar can be accessed through main and journaling screen by tapping on the date.
 * When accessing to it you have options like (add a log ,new task ,find experiences).
 * You can see on which dates you have added logs and when you have uppcomming or past tasks.
-* See how many logs you have made and make sure not
-* Choose a date and add a log or a task.Thats it!!
+* See how many logs you have made and make sure not to lose your streaks!
+* Choose a date and add a log or a task. Thats it!!
 
 
 With Journito, transforming your daily routines into meaningful and fulfilling
