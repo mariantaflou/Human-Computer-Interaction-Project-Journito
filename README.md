@@ -105,7 +105,7 @@ Log in using the following credentials:<br>
 **How to use Task Management**
 * On the main or journaling screen by tapping to **My tasks** you can see a preview of all your taks.
 * Tapping on **(+)** button you can add a task allowing you to set title,priority ,location ,date.
-* Tap on **save** button and your task is ready.So simple!!!
+* Tap on **save** button and your task is ready. So simple!!!
 * You can mark tasks as complete to track your progress.
 
 **How to use AI Chat**
