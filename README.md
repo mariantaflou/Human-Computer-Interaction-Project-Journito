@@ -148,8 +148,10 @@ The project uses the following packages:
 
 
 ## Screenshots add screens (ernest)
-* Add screenshots of your app's UI (login screen, calendar view, task details, etc.).
-
+* Here you can see all the basic screens our app contains.
+ ![image alt]()
+ ![image alt]()
+ ![image alt]()
 
 
 ## License
