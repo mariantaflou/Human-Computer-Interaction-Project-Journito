@@ -218,7 +218,7 @@ class _JournalingScreenState extends State<JournalingScreen> {
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: [
         _buildButton(context, 'Find Experiences', '/experiences'),
-        _buildButton(context, "Today's Tasks", '/tasks'),
+        _buildButton(context, "My tasks", '/tasks'),
       ],
     );
   }
