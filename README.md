@@ -55,7 +55,7 @@ flutter doctor
 ```
 **Steps to Install**
 * Clone the Repository
-First, clone the Jurnito repository to your local machine using Git:
+First, clone the Journito repository to your local machine using Git:
 ```bash
 git clone https://github.com/mariantaflou/journito.git
 ```
@@ -72,7 +72,7 @@ flutter pub get
 ```
 
 **Open the Project in Android Studio**
-* Open Android Studio, then click on "Open" and select the Jurnito project folder.
+* Open Android Studio, then click on "Open" and select the Journito project folder.
 
 **Run the App**
 
@@ -90,10 +90,11 @@ Once the app is running, you can interact with it and test its features. Since J
 
 ## Usage   AI missing (ernest)
 Journito is currently in its demo phase, offering a glimpse of its exciting features. Follow these steps to explore the app:
+
 **Getting Started**
 Log in using the following credentials:<br>
-* Username: *user*
-* Password: *password*
+* Username: **user**
+* Password: **password**
 
 **How to use Journaling**
 * Tap on *How was your day* to capture your daily thoughts.
@@ -102,17 +103,18 @@ Log in using the following credentials:<br>
 
 
 **How to use Task Management**
-* On the main or journaling screen by tapping to *My tasks* you can see a preview of all your taks.
-* Tapping on *(+)add* button you can add a task allowing you to set title,priority ,location ,date.
-* Tap on *save* button and your task is ready.So simple!!!
+* On the main or journaling screen by tapping to **My tasks** you can see a preview of all your taks.
+* Tapping on **(+)** button you can add a task allowing you to set title,priority ,location ,date.
+* Tap on **save** button and your task is ready.So simple!!!
 * You can mark tasks as complete to track your progress.
 
 **How to use AI Chat**
 * Every screen contains AI chat button to interact effortlessly.
-* When it comes to Experiences screen AI 
-**AI Experiences**
-* Discover tailored suggestions for activities and hobbies.
-* Browse detailed descriptions of new experiences.
+* Tap it and AI chat will resolve all your queries.
+
+**How to use Experiences**
+* By tapping on **Find experiencies** you can see recommended experiencies made by AI.
+* All the experiencies include detailed descriptions you can read and follow.
 
 **How to use Motivational Calendar**
 * Motivational calendar can be accessed through main and journaling screen.
@@ -147,6 +149,7 @@ The project uses the following packages:
 
 ## Screenshots add screens (ernest)
 * Add screenshots of your app's UI (login screen, calendar view, task details, etc.).
+
 
 
 ## License
