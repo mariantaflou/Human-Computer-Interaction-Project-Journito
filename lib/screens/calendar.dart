@@ -94,6 +94,7 @@ class _CalendarScreenState extends State<CalendarScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: false,  // Add this line to prevent auto-resizing
       body: Container(
         decoration: const BoxDecoration(
           gradient: LinearGradient(
@@ -107,104 +108,115 @@ class _CalendarScreenState extends State<CalendarScreen> {
             ],
           ),
         ),
-        child: Column(
-          children: [
-            const SizedBox(height: 40),
-            _buildTitleAndProfile(),
-            const SizedBox(height: 20),
-            Expanded(
-              child: Container(
-                decoration: const BoxDecoration(
-                  color: Color(0xff52717B),
-                  borderRadius: BorderRadius.only(
-                    topLeft: Radius.circular(45),
-                    topRight: Radius.circular(45),
+        child: SafeArea(  // Add SafeArea
+          child: Column(
+            children: [
+              _buildTitleAndProfile(),
+              Expanded(
+                child: SingleChildScrollView(  // Make the content scrollable
+                  child: Column(
+                    children: [
+                      Container(
+                        decoration: const BoxDecoration(
+                          color: Color(0xff52717B),
+                          borderRadius: BorderRadius.only(
+                            topLeft: Radius.circular(45),
+                            topRight: Radius.circular(45),
+                          ),
+                        ),
+                        child: Column(
+                          children: [
+                            TableCalendar(
+                              firstDay: DateTime.utc(2022, 1, 1),
+                              lastDay: DateTime.utc(2025, 12, 31),
+                              focusedDay: _focusedDay,
+                              calendarFormat: _calendarFormat,
+                              selectedDayPredicate: (day) => isSameDay(_selectedDay, day),
+                              onDaySelected: (selectedDay, focusedDay) {
+                                setState(() {
+                                  _selectedDay = selectedDay;
+                                  _focusedDay = focusedDay;
+                                });
+                              },
+                              headerStyle: const HeaderStyle(
+                                formatButtonVisible: false,
+                                titleCentered: true,
+                                titleTextStyle: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 20,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                                leftChevronIcon: Icon(Icons.chevron_left, color: Colors.white),
+                                rightChevronIcon: Icon(Icons.chevron_right, color: Colors.white),
+                              ),
+                              daysOfWeekStyle: const DaysOfWeekStyle(
+                                weekdayStyle: TextStyle(color: Colors.white),
+                                weekendStyle: TextStyle(color: Colors.grey),
+                              ),
+                              calendarStyle: const CalendarStyle(
+                                todayDecoration: BoxDecoration(
+                                  color: Color(0xff1f3f42),
+                                  shape: BoxShape.circle,
+                                ),
+                                selectedDecoration: BoxDecoration(
+                                  color: Color(0xff627E87),
+                                  shape: BoxShape.circle,
+                                ),
+                                defaultTextStyle: TextStyle(color: Colors.white),
+                                weekendTextStyle: TextStyle(color: Colors.white),
+                                outsideDaysVisible: false,
+                              ),
+                              calendarBuilders: CalendarBuilders(
+                                markerBuilder: (context, day, events) {
+                                  final dateString =
+                                      '${day.year}-${day.month.toString().padLeft(2, '0')}-${day.day.toString().padLeft(2, '0')}';
+
+                                  if (_loggedDates.contains(dateString) &&
+                                      _datesWithTasks.contains(dateString)) {
+                                    return Stack(
+                                      children: [
+                                        _buildMarker(const Color(0xff1f3f42), isLeft: true),
+                                        _buildMarker(const Color(0xffc9a77a), isLeft: false),
+                                      ],
+                                    );
+                                  } else if (_loggedDates.contains(dateString)) {
+                                    return Stack(
+                                      children: [
+                                        _buildMarker(const Color(0xff1f3f42), isLeft: true),
+                                      ],
+                                    );
+                                  } else if (_datesWithTasks.contains(dateString)) {
+                                    return Stack(
+                                      children: [
+                                        _buildMarker(const Color(0xffc9a77a), isLeft: true),
+                                      ],
+                                    );
+                                  }
+                                  return null;
+                                },
+                              ),
+                            ),
+                            const SizedBox(height: 16),
+                            _buildLogsAndStreaksSection(),
+                            const SizedBox(height: 20),
+                            _buildBottomButtons(context),
+                            const SizedBox(height: 16),
+                          ],
+                        ),
+                      ),
+                    ],
                   ),
                 ),
-                child: Column(
-                  children: [
-                    TableCalendar(
-                      firstDay: DateTime.utc(2022, 1, 1),
-                      lastDay: DateTime.utc(2025, 12, 31),
-                      focusedDay: _focusedDay,
-                      calendarFormat: _calendarFormat,
-                      selectedDayPredicate: (day) => isSameDay(_selectedDay, day),
-                      onDaySelected: (selectedDay, focusedDay) {
-                        setState(() {
-                          _selectedDay = selectedDay;
-                          _focusedDay = focusedDay;
-                        });
-                      },
-                      headerStyle: const HeaderStyle(
-                        formatButtonVisible: false,
-                        titleCentered: true,
-                        titleTextStyle: TextStyle(
-                          color: Colors.white,
-                          fontSize: 20,
-                          fontWeight: FontWeight.bold,
-                        ),
-                        leftChevronIcon: Icon(Icons.chevron_left, color: Colors.white),
-                        rightChevronIcon: Icon(Icons.chevron_right, color: Colors.white),
-                      ),
-                      daysOfWeekStyle: const DaysOfWeekStyle(
-                        weekdayStyle: TextStyle(color: Colors.white),
-                        weekendStyle: TextStyle(color: Colors.grey),
-                      ),
-                      calendarStyle: const CalendarStyle(
-                        todayDecoration: BoxDecoration(
-                          color: Color(0xff1f3f42),
-                          shape: BoxShape.circle,
-                        ),
-                        selectedDecoration: BoxDecoration(
-                          color: Color(0xff627E87),
-                          shape: BoxShape.circle,
-                        ),
-                        defaultTextStyle: TextStyle(color: Colors.white),
-                        weekendTextStyle: TextStyle(color: Colors.white),
-                        outsideDaysVisible: false,
-                      ),
-                      calendarBuilders: CalendarBuilders(
-                        markerBuilder: (context, day, events) {
-                          final dateString =
-                              '${day.year}-${day.month.toString().padLeft(2, '0')}-${day.day.toString().padLeft(2, '0')}';
-
-                          if (_loggedDates.contains(dateString) &&
-                              _datesWithTasks.contains(dateString)) {
-                            return Stack(
-                              children: [
-                                _buildMarker(const Color(0xff1f3f42), isLeft: true),  // Log marker (left)
-                                _buildMarker(const Color(0xffc9a77a), isLeft: false),  // Task marker (right)
-                              ],
-                            );
-                          } else if (_loggedDates.contains(dateString)) {
-                            return Stack(
-                              children: [
-                                _buildMarker(const Color(0xff1f3f42), isLeft: true),  // Single log marker
-                              ],
-                            );
-                          } else if (_datesWithTasks.contains(dateString)) {
-                            return Stack(
-                              children: [
-                                _buildMarker(const Color(0xffc9a77a), isLeft: true),  // Single task marker
-                              ],
-                            );
-                          }
-
-                          return null;
-                        },
-                      ),
-                    ),
-                    const SizedBox(height: 16),
-                    _buildLogsAndStreaksSection(),
-                    const SizedBox(height: 20),
-                    _buildBottomButtons(context),
-                    const SizedBox(height: 16),
-                  ],
-                ),
               ),
-            ),
-            buildAIButton(context),
-          ],
+              // Move AI button outside the scroll area
+              Padding(
+                padding: EdgeInsets.only(
+                  bottom: MediaQuery.of(context).viewInsets.bottom + 8,  // Add padding for keyboard
+                ),
+                child: buildAIButton(context),
+              ),
+            ],
+          ),
         ),
       ),
     );
