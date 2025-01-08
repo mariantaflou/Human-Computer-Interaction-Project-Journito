@@ -158,7 +158,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       Navigator.pushNamed(context, '/tasks');
                     },
                     child: const Text(
-                      "Today's Tasks",
+                      "My Tasks",
                       style: TextStyle(
                         fontSize: 25,
                         color: Colors.white,
