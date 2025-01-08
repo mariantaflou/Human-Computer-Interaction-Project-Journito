@@ -39,7 +39,7 @@ Table of Contents:
 
 
 ## Installation 
-Follow the steps below to set up and run Jurnito on your local machine. This guide assumes you have basic knowledge of software installation and system dependencies.
+Follow the steps below to set up and run Journito on your local machine. This guide assumes you have basic knowledge of software installation and system dependencies.
 
 Prerequisites
 Before installing, ensure you have the following software installed on your machine:
@@ -85,36 +85,42 @@ flutter run
 
 **Access the App**
 
-Once the app is running, you can interact with it and test its features. Since Jurnito is a demo app, you can log in using the default username and password credentials.
+Once the app is running, you can interact with it and test its features. Since Journito is a demo app, you can log in using the default username and password credentials.
 
 
-## Usage   Add more info (ernest)
-Jurnito is currently in its demo phase, offering a glimpse of its exciting features. Follow these steps to explore the app:
+## Usage   AI missing (ernest)
+Journito is currently in its demo phase, offering a glimpse of its exciting features. Follow these steps to explore the app:
 **Getting Started**
 Log in using the following credentials:<br>
-* Username: user<br>
-* Password: password<br>
+* Username: *user*
+* Password: *password*
 
 **How to use Journaling**
-* Add journal entries to reflect on your day.<br>
-* Attach photos to create memorable visual logs.<br>
+* Tap on *How was your day* to capture your daily thoughts.
+* Attach button gives you the opportunity to add photos in order to create memorable visual logs.
+* You can also add your thoughts of a new or previous day by simply tapping on a date of the callendar.
+
 
 **How to use Task Management**
-* Add tasks and set priorities.<br>
-* Mark tasks as complete to track your progress.<br>
+* On the main or journaling screen by tapping to *My tasks* you can see a preview of all your taks.
+* Tapping on *(+)add* button you can add a task allowing you to set title,priority ,location ,date.
+* Tap on *save* button and your task is ready.So simple!!!
+* You can mark tasks as complete to track your progress.
 
-**How to useAI Chat**
-* Engage with the AI chat for brainstorming ideas or seeking inspiration.<br>
-* Use natural language to interact effortlessly.<br>
-
+**How to use AI Chat**
+* Every screen contains AI chat button to interact effortlessly.
+* When it comes to Experiences screen AI 
 **AI Experiences**
-* Discover tailored suggestions for activities and hobbies.<br>
-* Browse detailed descriptions of new experiences.<br>
+* Discover tailored suggestions for activities and hobbies.
+* Browse detailed descriptions of new experiences.
 
 **How to use Motivational Calendar**
-* Track journaling streaks and task completion history.<br>
+* Motivational calendar can be accessed through main and journaling screen.
+* When accessing to it you have options like (add a log ,new task ,find experiences).
+* Choose a date to add a log.Thats it!!
 
-With Jurnito, transforming your daily routines into meaningful and fulfilling<br>
+
+With Journito, transforming your daily routines into meaningful and fulfilling>
 experiences has never been easier. Start exploring today! 😊
 
 
@@ -130,7 +136,7 @@ The project uses the following packages:
 
 
 ## Architecture
-* The architecture of Jurnito is designed to ensure scalability, flexibility, and a seamless user experience. The app combines a user-friendly front-end, robust back-end, and AI-driven features to create a comprehensive platform for journaling, task management, and personal growth. This modular design allows easy maintenance and future expansion.
+* The architecture of Journito is designed to ensure scalability, flexibility, and a seamless user experience. The app combines a user-friendly front-end, robust back-end, and AI-driven features to create a comprehensive platform for journaling, task management, and personal growth. This modular design allows easy maintenance and future expansion.
 
 * The design of the application is strongly influenced by established design patterns, which ensure a consistent, intuitive user experience and high-quality code structure. These design patterns dictate how the user interface elements are laid out and how components interact with each other, contributing to the overall architectural integrity of the app.
 
@@ -140,17 +146,13 @@ The project uses the following packages:
 
 
 ## Screenshots add screens (ernest)
-Add screenshots of your app's UI (login screen, calendar view, task details, etc.).
+* Add screenshots of your app's UI (login screen, calendar view, task details, etc.).
 
 
 ## License
-This project was created as part of a computer-human interaction assignment <br>and is not licensed for public or commercial use.
+* This project was created as part of a computer-human interaction assignment and is not licensed for public or commercial use.
 
-## Credits add names of each(ernest)
-This project was created collaboratively by:<br>
-•[Your Name]: Role or area of focus (e.g., "UI/UX Design and Frontend Development")<br>
-•[Second Person's Name]: Role or area of focus (e.g., "Backend Development and Database Management")<br>
-•[Third Person's Name]: Role or area of focus (e.g., "Testing and Documentation")
+
 
 
 
