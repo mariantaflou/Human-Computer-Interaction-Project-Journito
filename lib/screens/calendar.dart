@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:journito/screens/tasks_screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:table_calendar/table_calendar.dart';
 import '../widgets/ai_button.dart';
+import 'dart:convert';
 
 class CalendarScreen extends StatefulWidget {
   const CalendarScreen({Key? key}) : super(key: key);
@@ -15,12 +17,18 @@ class _CalendarScreenState extends State<CalendarScreen> {
   DateTime _focusedDay = DateTime(DateTime.now().year, DateTime.now().month, 1);
   DateTime? _selectedDay;
   List<String> _loggedDates = [];
+  List<String> _datesWithTasks = [];
   int _currentStreak = 0;
 
   @override
   void initState() {
     super.initState();
-    _loadLoggedDates();
+    _loadData();
+  }
+
+  Future<void> _loadData() async {
+    await _loadLoggedDates();
+    await _loadDatesWithTasks();
   }
 
   Future<void> _loadLoggedDates() async {
@@ -31,17 +39,36 @@ class _CalendarScreenState extends State<CalendarScreen> {
     });
   }
 
+  Future<void> _loadDatesWithTasks() async {
+    final prefs = await SharedPreferences.getInstance();
+    final tasksJson = prefs.getString('tasks');
+    if (tasksJson != null) {
+      final List<dynamic> taskList = jsonDecode(tasksJson);
+      Set<String> dates = {};
+      for (var task in taskList) {
+        if (task['date'] != null) {
+          final taskDate = DateTime.parse(task['date']);
+          final formattedDate =
+              '${taskDate.year}-${taskDate.month.toString().padLeft(2, '0')}-${taskDate.day.toString().padLeft(2, '0')}';
+          dates.add(formattedDate);
+        }
+      }
+      setState(() {
+        _datesWithTasks = dates.toList();
+      });
+    }
+  }
+
   void _calculateStreak() {
     if (_loggedDates.isEmpty) {
       _currentStreak = 0;
       return;
     }
 
-    // Convert string dates to DateTime objects and sort them
     List<DateTime> dates = _loggedDates
         .map((dateStr) => DateTime.parse(dateStr))
         .toList()
-      ..sort((a, b) => b.compareTo(a)); // Sort in descending order
+      ..sort((a, b) => b.compareTo(a));
 
     DateTime today = DateTime.now();
     today = DateTime(today.year, today.month, today.day);
@@ -49,7 +76,6 @@ class _CalendarScreenState extends State<CalendarScreen> {
     int streak = 0;
     DateTime currentDate = today;
 
-    // Start counting streak from today or most recent logged date
     for (var i = 0; i <= dates.length; i++) {
       String currentDateStr =
           '${currentDate.year}-${currentDate.month.toString().padLeft(2, '0')}-${currentDate.day.toString().padLeft(2, '0')}';
@@ -63,12 +89,6 @@ class _CalendarScreenState extends State<CalendarScreen> {
     }
 
     _currentStreak = streak;
-  }
-
-  bool _isLogged(DateTime date) {
-    final dateString =
-        '${date.year}-${date.month.toString().padLeft(2, '0')}-${date.day.toString().padLeft(2, '0')}';
-    return _loggedDates.contains(dateString);
   }
 
   @override
@@ -114,13 +134,6 @@ class _CalendarScreenState extends State<CalendarScreen> {
                           _selectedDay = selectedDay;
                           _focusedDay = focusedDay;
                         });
-                        Navigator.pushNamed(
-                          context,
-                          '/journaling',
-                          arguments: {'selectedDate': selectedDay},
-                        ).then((_) {
-                          _loadLoggedDates(); // Reload dates when returning
-                        });
                       },
                       headerStyle: const HeaderStyle(
                         formatButtonVisible: false,
@@ -152,16 +165,38 @@ class _CalendarScreenState extends State<CalendarScreen> {
                       ),
                       calendarBuilders: CalendarBuilders(
                         markerBuilder: (context, day, events) {
-                          if (_isLogged(day)) {
-                            return _buildMarker(const Color(0xff1f3f42));
+                          final dateString =
+                              '${day.year}-${day.month.toString().padLeft(2, '0')}-${day.day.toString().padLeft(2, '0')}';
+
+                          if (_loggedDates.contains(dateString) &&
+                              _datesWithTasks.contains(dateString)) {
+                            return Stack(
+                              children: [
+                                _buildMarker(const Color(0xff1f3f42), isLeft: true),  // Log marker (left)
+                                _buildMarker(const Color(0xffc9a77a), isLeft: false),  // Task marker (right)
+                              ],
+                            );
+                          } else if (_loggedDates.contains(dateString)) {
+                            return Stack(
+                              children: [
+                                _buildMarker(const Color(0xff1f3f42), isLeft: true),  // Single log marker
+                              ],
+                            );
+                          } else if (_datesWithTasks.contains(dateString)) {
+                            return Stack(
+                              children: [
+                                _buildMarker(const Color(0xffc9a77a), isLeft: true),  // Single task marker
+                              ],
+                            );
                           }
+
                           return null;
                         },
                       ),
                     ),
                     const SizedBox(height: 16),
                     _buildLogsAndStreaksSection(),
-                    const SizedBox(height: 20), // Adjust height to move buttons higher
+                    const SizedBox(height: 20),
                     _buildBottomButtons(context),
                     const SizedBox(height: 16),
                   ],
@@ -175,15 +210,17 @@ class _CalendarScreenState extends State<CalendarScreen> {
     );
   }
 
-  Widget _buildMarker(Color color) {
+  Widget _buildMarker(Color color, {bool isLeft = true}) {
     return Positioned(
       bottom: 1,
+      left: isLeft ? 14 : null,
+      right: isLeft ? null : 14,
       child: Container(
-        height: 5,
-        width: 20,
+        height: 6,
+        width: 6,
         decoration: BoxDecoration(
           color: color,
-          borderRadius: BorderRadius.circular(2),
+          shape: BoxShape.circle,
         ),
       ),
     );
@@ -303,9 +340,35 @@ class _CalendarScreenState extends State<CalendarScreen> {
       padding: const EdgeInsets.symmetric(vertical: 4.0, horizontal: 24.0),
       child: ElevatedButton.icon(
         onPressed: () {
-          Navigator.pushNamed(context, route).then((_) {
-            _loadLoggedDates(); // Reload dates when returning from any screen
-          });
+          if (_selectedDay == null) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(content: Text('Please select a date first')),
+            );
+            return;
+          }
+
+          if (route == '/tasks') {
+            // For tasks route, use push instead of pushNamed to pass the widget directly
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => TasksScreen(selectedDate: _selectedDay),
+              ),
+            ).then((_) {
+              _loadLoggedDates();
+              _loadDatesWithTasks();
+            });
+          } else {
+            // For other routes, use the existing navigation
+            Navigator.pushNamed(
+              context,
+              route,
+              arguments: {'selectedDate': _selectedDay},
+            ).then((_) {
+              _loadLoggedDates();
+              _loadDatesWithTasks();
+            });
+          }
         },
         icon: Icon(icon, color: const Color(0xff1f3f42)),
         label: Text(
