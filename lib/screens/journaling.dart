@@ -265,16 +265,41 @@ class _JournalingScreenState extends State<JournalingScreen> {
                       scrollDirection: Axis.horizontal,
                       itemCount: _attachedImages.length,
                       itemBuilder: (context, index) {
-                        return Container(
-                          margin: const EdgeInsets.symmetric(horizontal: 8),
-                          width: 150,
-                          child: ClipRRect(
-                            borderRadius: BorderRadius.circular(10),
-                            child: Image.file(
-                              _attachedImages[index],
-                              fit: BoxFit.cover,
+                        return Stack(
+                          children: [
+                            Container(
+                              margin: const EdgeInsets.symmetric(horizontal: 8),
+                              width: 150,
+                              child: ClipRRect(
+                                borderRadius: BorderRadius.circular(10),
+                                child: Image.file(
+                                  _attachedImages[index],
+                                  fit: BoxFit.cover,
+                                ),
+                              ),
                             ),
-                          ),
+                            Positioned(
+                              top: 5, // Adjust the position to center the smaller icon
+                              right: 10,
+                              child: Container(
+                                width: 20, // Reduced circle size
+                                height: 20,
+                                decoration: BoxDecoration(
+                                  color: Colors.black.withOpacity(0.5),
+                                  shape: BoxShape.circle,
+                                ),
+                                child: IconButton(
+                                  padding: EdgeInsets.zero, // Remove padding
+                                  icon: const Icon(
+                                    Icons.close,
+                                    color: Colors.white,
+                                    size: 14, // Smaller "X" size
+                                  ),
+                                  onPressed: () => _removeImage(index),
+                                ),
+                              ),
+                            ),
+                          ],
                         );
                       },
                     ),
@@ -295,6 +320,12 @@ class _JournalingScreenState extends State<JournalingScreen> {
         ),
       ),
     );
+  }
+
+  void _removeImage(int index) {
+    setState(() {
+      _attachedImages.removeAt(index);
+    });
   }
 
   Widget _buildBottomButtonRow(BuildContext context) {
@@ -372,4 +403,3 @@ class _JournalingScreenState extends State<JournalingScreen> {
     }
   }
 }
-
