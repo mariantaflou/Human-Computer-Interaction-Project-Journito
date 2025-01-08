@@ -88,7 +88,7 @@ flutter run
 Once the app is running, you can interact with it and test its features. Since Journito is a demo app, you can log in using the default username and password credentials.
 
 
-## Usage   AI missing (ernest)
+## Usage   
 Journito is currently in its demo phase, offering a glimpse of its exciting features. Follow these steps to explore the app:
 
 **Getting Started**
@@ -97,7 +97,7 @@ Log in using the following credentials:<br>
 * Password: **password**
 
 **How to use Journaling**
-* Tap on *How was your day* to capture your daily thoughts.
+* Tap on **How was your day** to capture your daily thoughts.
 * Attach button gives you the opportunity to add photos in order to create memorable visual logs.
 * You can also add your thoughts of a new or previous day by simply tapping on a date of the callendar.
 
@@ -122,7 +122,7 @@ Log in using the following credentials:<br>
 * Choose a date to add a log.Thats it!!
 
 
-With Journito, transforming your daily routines into meaningful and fulfilling>
+With Journito, transforming your daily routines into meaningful and fulfilling
 experiences has never been easier. Start exploring today! 😊
 
 
@@ -147,7 +147,7 @@ The project uses the following packages:
 
 
 
-## Screenshots add screens (ernest)
+## Screenshots 
 * Here you can see all the basic screens our app contains.
  ![image alt](https://github.com/mariantaflou/journito/blob/a86553637b1a53bd81e1c6996b809d1cd79fbc15/Screenshot%202025-01-08%201.jpg)
  ![image alt](https://github.com/mariantaflou/journito/blob/4b1e78c8484e768629f4e6cf1ba03d7c48c3ca7b/Screenshot%202025-01-08%202.jpg)
