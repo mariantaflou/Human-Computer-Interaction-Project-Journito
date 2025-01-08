@@ -14,12 +14,25 @@ class JournalingScreen extends StatefulWidget {
 class _JournalingScreenState extends State<JournalingScreen> {
   final TextEditingController _textController = TextEditingController();
   List<File> _attachedImages = [];
-  DateTime _currentDate = DateTime.now();
+  //DateTime _currentDate = DateTime.now();
+  late DateTime _currentDate;
+  bool _initialized = false;
 
   @override
   void initState() {
     super.initState();
-    _loadJournalEntry();
+    _currentDate = DateTime.now(); // Set default value
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    if (!_initialized) {
+      final args = ModalRoute.of(context)?.settings.arguments as Map<String, dynamic>?;
+      _currentDate = args?['selectedDate'] ?? DateTime.now();
+      _loadJournalEntry();
+      _initialized = true;
+    }
   }
 
   Future<void> _loadJournalEntry() async {
@@ -35,23 +48,29 @@ class _JournalingScreenState extends State<JournalingScreen> {
   }
 
   Future<void> _saveJournal() async {
+    // Only save if there's actual content
+    if (_textController.text.trim().isEmpty && _attachedImages.isEmpty) {
+      Navigator.pop(context);
+      return;
+    }
+
     final prefs = await SharedPreferences.getInstance();
     final key = _formattedDate();
 
-    // Save the journal content
     await prefs.setString('${key}_text', _textController.text);
 
-    // Save image paths
     final imagePaths = _attachedImages.map((image) => image.path).toList();
     await prefs.setStringList('${key}_images', imagePaths);
 
-    // Mark the date as logged
     List<String> loggedDates = prefs.getStringList('logs') ?? [];
     if (!loggedDates.contains(key)) {
       loggedDates.add(key);
       await prefs.setStringList('logs', loggedDates);
     }
+
+    Navigator.pop(context);
   }
+
 
   String _formattedDate() {
     return '${_currentDate.year}-${_currentDate.month.toString().padLeft(2, '0')}-${_currentDate.day.toString().padLeft(2, '0')}';
