@@ -149,7 +149,7 @@ The project uses the following packages:
 
 ## Screenshots add screens (ernest)
 * Here you can see all the basic screens our app contains.
- ![image alt]()
+ ![image alt](https://github.com/mariantaflou/journito/blob/a86553637b1a53bd81e1c6996b809d1cd79fbc15/Screenshot%202025-01-08%201.jpg)
  ![image alt]()
  ![image alt]()
 
