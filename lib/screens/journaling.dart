@@ -217,8 +217,8 @@ class _JournalingScreenState extends State<JournalingScreen> {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: [
-        _buildButton(context, 'Find Experiences', '/experiences'),
-        _buildButton(context, "My tasks", '/tasks'),
+        _buildButton(context, 'Experiences', '/experiences'),
+        _buildButton(context, "My Tasks", '/tasks'),
       ],
     );
   }
@@ -368,7 +368,7 @@ class _JournalingScreenState extends State<JournalingScreen> {
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(25),
         ),
-        minimumSize: const Size(140, 48),
+        fixedSize: const Size(160, 48), // Changed from minimumSize to fixedSize
       ),
       child: Text(
         title,
@@ -403,3 +403,4 @@ class _JournalingScreenState extends State<JournalingScreen> {
     }
   }
 }
+
