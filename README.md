@@ -11,7 +11,6 @@ Table of Contents:
 - [Dependencies](#dependencies)
 - [Architecture](#architecture)
 - [Screenshots](#screenshots)
-- [License](#license)
 
 
 ## Description
@@ -41,6 +40,23 @@ Table of Contents:
 ## Installation 
 Follow the steps below to set up and run Journito on your local machine. This guide assumes you have basic knowledge of software installation and system dependencies.
 
+### Option 1: Direct Installation (Recommended for Users)
+To install Journito directly on your Android device:
+
+Prerequisites:
+* Android device running Android 5.0 (API level 21) or higher
+* At least 22 MB of free storage space
+* Permission to install apps from unknown sources
+
+Installation Steps:
+1. Download the Journito APK file (21.4 MB) to your Android device
+2. Open your device's Settings > Security
+3. Enable "Install from Unknown Sources" or "Install Unknown Apps"
+4. Find the downloaded APK file in your Downloads folder
+5. Tap the APK file and select "Install"
+6. Once installation is complete, tap "Open" to launch Journito
+
+### Option 2: Building from Source (For Developers)
 Prerequisites
 Before installing, ensure you have the following software installed on your machine:
 
@@ -132,9 +148,16 @@ experiences has never been easier. Start exploring today! 😊
 The project uses the following packages:
 * Flutter SDK: ^3.5.4
 * shared_preferences: ^2.0.18 (local data persistence)
+* http: ^1.1.0 (HTTP client for API requests)
+* cupertino_icons: ^1.0.8 (iOS icons)
 * table_calendar: ^3.1.3 (calendar integration)
 * image_picker: ^1.1.2 (photo picker)
-* cupertino_icons: ^1.0.8 (iOS icons)
+* flutter_dotenv: ^5.1.0 (environment variables management)
+* flutter_launcher_icons: ^0.13.1 (app icon configuration)
+
+Development dependencies:
+* flutter_test (testing framework)
+* flutter_lints: ^4.0.0 (code analysis and style guide)
 
 
 
@@ -155,8 +178,6 @@ The project uses the following packages:
  ![image alt](https://github.com/mariantaflou/journito/blob/4b1e78c8484e768629f4e6cf1ba03d7c48c3ca7b/Screenshot%202025-01-08%203.jpg)
 
 
-## License
-* This project was created as part of a computer-human interaction assignment and is not licensed for public or commercial use.
 
 
 
